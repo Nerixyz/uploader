@@ -1,0 +1,12 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: #121212;
+    color: #eee;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

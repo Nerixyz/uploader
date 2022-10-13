@@ -1,0 +1,6 @@
+/target
+.idea
+.code
+.vscode
+uploads
+config.toml

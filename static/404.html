@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="og:title" content="Oops, your file wasn't found">
+    <meta name="og:description" content="You might have followed an invalid link.">
+    <title>Not Found</title>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            background: #121212;
+            font-family: sans-serif;
+            color: #ec2b2b;
+
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .bg {
+            background: url("/static/beams.webp");
+            position: absolute;
+            inset: 0;
+            animation: image 1s cubic-bezier(.68,.01,.22,.93);
+        }
+        h1 {
+            position: relative;
+            animation: enter 1s cubic-bezier(0,.75,.05,.99);
+            text-shadow: #000a 2px 2px 10px;
+            font-size: 3rem;
+        }
+        @keyframes enter {
+            from {
+                transform: scale(200%);
+                opacity: 0;
+            }
+            to {
+                transform: scale(100%);
+                opacity: 100%;
+            }
+        }
+        @keyframes image {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bg"></div>
+<h1>Oops, your file wasn't found</h1>
+</body>
+</html>

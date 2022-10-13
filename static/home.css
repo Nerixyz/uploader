@@ -1,0 +1,72 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: #121212;
+    font-family: sans-serif;
+    color: #45f;
+
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.bg {
+    background: url("/static/beams.webp");
+    position: absolute;
+    inset: 0;
+    animation: image 1s cubic-bezier(.68,.01,.22,.93);
+}
+
+main {
+    position: relative;
+    animation: enter 1s cubic-bezier(0,.75,.05,.99);
+    text-shadow: #000a 2px 2px 10px;
+    font-size: 3rem;
+}
+
+@keyframes enter {
+    from {
+        transform: scale(200%);
+        opacity: 0;
+    }
+    to {
+        transform: scale(100%);
+        opacity: 100%;
+    }
+}
+
+@keyframes image {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
+h1 {
+    margin-bottom: 1rem;
+}
+
+.icon-link {
+    background: transparent;
+    color: #eee;
+    padding: 1rem;
+    transform: none;
+    transition: color 150ms;
+}
+
+.icon-link:is(:hover, :focus-visible) {
+    color: #45f;
+    outline: none;
+}
+
+.icon-link > svg {
+    width: 2rem;
+}
