@@ -15,13 +15,15 @@ pub struct TemplateError(#[from] askama::Error);
 
 #[get("/a/{name}")]
 pub async fn audio_template(path: Path<String>) -> Result<HttpResponse, TemplateError> {
-    let rendered = AudioTemplate { file: &format!("/{path}") }.render()?;
+    let rendered = AudioTemplate {
+        file: &format!("/{path}"),
+    }
+    .render()?;
     Ok(HttpResponse::Ok()
         .content_type("text/html")
         .insert_header((header::CACHE_CONTROL, "max-age=3600"))
         .body(rendered))
 }
-
 
 #[get("/t/{name}")]
 pub async fn text_template() -> impl Responder {

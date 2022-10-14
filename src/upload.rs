@@ -188,20 +188,18 @@ where
 
     match maybe {
         Some((ty, hint)) => Ok((ty, hint, bytes.map(BytesMut::freeze))),
-        None => {
-            match bytes {
-                Some(bytes) => {
-                    if std::str::from_utf8(&bytes).is_ok() {
-                        Ok(("txt", TypeHint::Text, Some(bytes.freeze())))
-                    } else {
-                        Ok(("bin", TypeHint::None, Some(bytes.freeze())))
-                    }
+        None => match bytes {
+            Some(bytes) => {
+                if std::str::from_utf8(&bytes).is_ok() {
+                    Ok(("txt", TypeHint::Text, Some(bytes.freeze())))
+                } else {
+                    Ok(("bin", TypeHint::None, Some(bytes.freeze())))
                 }
-               None => {
-                   Err(UploadError::Io(io::Error::from(io::ErrorKind::UnexpectedEof)))
-               }
             }
-        }
+            None => Err(UploadError::Io(io::Error::from(
+                io::ErrorKind::UnexpectedEof,
+            ))),
+        },
     }
 }
 

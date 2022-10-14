@@ -11,5 +11,9 @@ pub struct Config {
     pub authorization: String,
 }
 
-pub static CONFIG: Lazy<Config> =
-    Lazy::new(|| toml::from_slice(&std::fs::read("config.toml").unwrap()).unwrap());
+pub static CONFIG: Lazy<Config> = Lazy::new(|| {
+    toml::from_slice(
+        &std::fs::read("config.toml").expect("A config.toml must be in the working directory"),
+    )
+    .expect("The config.toml must be valid")
+});

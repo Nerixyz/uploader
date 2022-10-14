@@ -1,10 +1,13 @@
 use std::future::Future;
+
 use actix_cors::Cors;
 use actix_files::{Files, NamedFile};
-use actix_web::{body::MessageBody, dev::{ServiceRequest, ServiceResponse}, http, http::{header, StatusCode}, web, App, HttpServer, Responder, get};
-use actix_web::dev::fn_service;
-use actix_web_lab::middleware::{from_fn, Next};
-use tracing::info;
+use actix_web::{
+    dev::{fn_service, ServiceRequest, ServiceResponse},
+    get, http,
+    http::{header, StatusCode},
+    web, App, HttpServer, Responder,
+};
 use tracing::level_filters::LevelFilter;
 use tracing_actix_web::TracingLogger;
 use tracing_subscriber::EnvFilter;
@@ -24,7 +27,9 @@ mod rng;
 mod templates;
 mod upload;
 
-fn not_found_svc(req: ServiceRequest) -> impl Future<Output = Result<ServiceResponse, actix_web::Error>> {
+fn not_found_svc(
+    req: ServiceRequest,
+) -> impl Future<Output = Result<ServiceResponse, actix_web::Error>> {
     async move {
         let (req, _) = req.into_parts();
         let file = NamedFile::open_async("./static/404.html").await?;
@@ -34,10 +39,14 @@ fn not_found_svc(req: ServiceRequest) -> impl Future<Output = Result<ServiceResp
     }
 }
 
-fn not_found_svc_short(req: ServiceRequest) -> impl Future<Output = Result<ServiceResponse, actix_web::Error>> {
+fn not_found_svc_short(
+    req: ServiceRequest,
+) -> impl Future<Output = Result<ServiceResponse, actix_web::Error>> {
     async move {
         let (req, _) = req.into_parts();
-        let file = NamedFile::open_async("./static/404.html").await?.use_etag(false);
+        let file = NamedFile::open_async("./static/404.html")
+            .await?
+            .use_etag(false);
         let mut res = file.into_response(&req);
         *res.status_mut() = StatusCode::NOT_FOUND;
         Ok(ServiceResponse::new(req, res))
