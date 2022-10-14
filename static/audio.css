@@ -1,55 +1,55 @@
 #view {
-    min-width: 30rem;
+  min-width: 30rem;
 }
 
 .buttons {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    animation: fade-in 500ms;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  animation: fade-in 500ms;
 }
 
 audio {
-    width: 100%;
-    margin-bottom: 1.2rem;
+  width: 100%;
+  margin-bottom: 1.2rem;
 }
 
 .controls {
-    padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.75rem;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
 }
 
 .range-group {
-    display: flex;
-    gap: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
 }
 
 .range-button {
-    padding-inline: 0;
-    border: none;
-    line-height: 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 100%;
-    background: transparent;
-    color: #45f;
-    cursor: pointer;
-    transition: 150ms;
-    transition-property: background, color;
+  padding-inline: 0;
+  border: none;
+  line-height: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 100%;
+  background: transparent;
+  color: #45f;
+  cursor: pointer;
+  transition: 150ms;
+  transition-property: background, color;
 }
 
 .range-button:is(:hover, :focus-visible) {
-    background: #fff3;
+  background: #fff3;
 }
 
 .range-button:active {
-    background: #45f;
-    color: black;
+  background: #45f;
+  color: black;
 }
 
 .range-button > svg {
-    width: 1rem;
-    height: 1rem;
+  width: 1rem;
+  height: 1rem;
 }

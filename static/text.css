@@ -1,98 +1,31 @@
-html {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    background: #121212;
-    height: 100%;
-}
-
-.bg-wrap {
-    background: url("/static/beams.webp");
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-main {
-    background: #0004;
-    backdrop-filter: blur(20px);
-    border: solid 1px #fff2;
-    box-shadow: #0005 3px 3px 20px 0px;
-    padding: 2rem;
-    margin: 2rem;
-    max-width: calc(100vw - 8rem);
-    word-break: break-all;
-    border-radius: 1rem;
-    transition: 150ms;
-    transition-property: background, box-shadow;
-}
-
-main:hover {
-    background: #0005;
-    backdrop-filter: blur(20px);
-    border: solid 1px #fff2;
-    box-shadow: #0009 3px 3px 20px 0px;
-}
-
 #text-view {
-    white-space: pre-wrap;
-    font-family: monospace;
-    opacity: 1;
-    transition: opacity 150ms;
-    animation: fade-in 500ms;
+  white-space: pre-wrap;
+  font-family: monospace;
+  opacity: 1;
+  transition: opacity 150ms;
+  animation: fade-in 500ms;
 }
 
 .buttons {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    animation: fade-in 500ms;
-}
-
-.loader {
-    width: 10rem;
-    height: 3px;
-    background: #45f;
-    border-radius: 2px;
-    animation: loader-loading infinite 1s cubic-bezier(.75,0,.25,1);
-}
-
-@keyframes loader-loading {
-    0% {
-        transform: scaleX(0);
-        transform-origin: left;
-    }
-    50% {
-        transform: scaleX(1);
-        transform-origin: left;
-    }
-    51% {
-        transform: scaleX(1);
-        transform-origin: right;
-    }
-    100% {
-        transform: scaleX(0);
-        transform-origin: right;
-    }
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  animation: fade-in 500ms;
 }
 
 @keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 main.loading > :is(.buttons, #text-view) {
-    display: none;
+  display: none;
 }
 
 main:not(.loading) > .loader {
-    display: none;
+  display: none;
 }

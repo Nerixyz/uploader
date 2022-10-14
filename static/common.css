@@ -1,90 +1,139 @@
 :root {
-    --theme: #45f;
+  --theme: #45f;
 }
 
 html {
-    height: 100%;
-    font-family: sans-serif;
+  height: 100%;
+  font-family: sans-serif;
 }
 
 body {
-    margin: 0;
-    background: #121212;
-    height: 100%;
+  margin: 0;
+  background: #121212;
+  height: 100%;
 }
 
 .bg-wrap {
-    background: url("/static/beams.webp");
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background: url('/static/beams.webp');
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 main {
-    background: #0004;
-    backdrop-filter: blur(20px);
-    border: solid 1px #fff2;
-    box-shadow: #0005 3px 3px 20px 0px;
-    padding: 2rem;
-    margin: 2rem;
-    max-width: calc(100vw - 8rem);
-    word-break: break-all;
-    border-radius: 1rem;
-    transition: 150ms;
-    transition-property: background, box-shadow;
-    animation: scale-up 600ms cubic-bezier(.18,.56,.25,1);
+  background: #0004;
+  backdrop-filter: blur(20px);
+  border: solid 1px #fff2;
+  box-shadow: #0005 3px 3px 20px 0px;
+  padding: 2rem;
+  margin: 2rem;
+  max-width: calc(100vw - 8rem);
+  word-break: break-all;
+  border-radius: 1rem;
+  transition: 150ms;
+  transition-property: background, box-shadow;
+  animation: scale-up 600ms cubic-bezier(0.18, 0.56, 0.25, 1);
 }
 
 main:hover {
-    background: #0005;
-    backdrop-filter: blur(20px);
-    border: solid 1px #fff2;
-    box-shadow: #0009 3px 3px 20px 0px;
+  background: #0005;
+  backdrop-filter: blur(20px);
+  border: solid 1px #fff2;
+  box-shadow: #0009 3px 3px 20px 0px;
 }
 
 @keyframes scale-up {
-    from {
-        transform-origin: top;
-        transform: scale(0);
-        opacity: 0;
-    }
-    to {
-        transform-origin: center;
-        transform: scale(1);
-        opacity: 1;
-    }
+  from {
+    transform-origin: top;
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform-origin: center;
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .icon-button {
-    background: transparent;
-    border: 2px solid var(--theme);
-    color: var(--theme);
+  background: transparent;
+  border: 2px solid var(--theme);
+  color: var(--theme);
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: 150ms;
-    transition-property: border-color, background, color;
-    gap: 0.5rem;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 150ms;
+  transition-property: border-color, background, color;
+  gap: 0.5rem;
 }
 
 .icon-button:is(:hover, :focus-visible) {
-    outline: none;
-    border-color: #fff9;
+  outline: none;
+  border-color: #fff9;
+  background: #fff1;
+}
+
+.icon-button.no-border {
+  border-color: transparent;
+}
+
+.col-red {
+  --theme: #e82626;
 }
 
 .icon-button:active {
-    outline: none;
-    border-color: transparent;
-    color: black;
-    background: var(--theme);
+  outline: none;
+  border-color: transparent;
+  color: black;
+  background: var(--theme);
 }
 
 .icon-button > svg {
-    width: 1.5rem;
+  width: 1.5rem;
+}
+
+.icon-button > input[type='submit'] {
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+.icon-button > input[type='submit']:focus-visible {
+  outline: none;
+}
+
+.loader {
+  width: 10rem;
+  height: 3px;
+  background: #45f;
+  border-radius: 2px;
+  animation: loader-loading infinite 1s cubic-bezier(0.75, 0, 0.25, 1);
+}
+
+@keyframes loader-loading {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  51% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
 }
