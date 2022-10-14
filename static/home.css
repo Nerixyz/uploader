@@ -21,7 +21,7 @@ p {
 }
 
 main {
-  min-width: 30rem;
+  min-width: min(30rem, 100vw - 8rem);
 }
 
 #view:not(.authenticated) > .auth {
