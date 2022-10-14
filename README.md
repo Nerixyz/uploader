@@ -40,6 +40,3 @@ In both cases a valid `Authorization` header must be used.
 ### Audio View
 
 <img src="https://user-images.githubusercontent.com/19953266/195894521-d1910407-54e6-412c-98af-e714ec6647e6.png" height="300px"/>
-
-
-
