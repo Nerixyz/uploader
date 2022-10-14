@@ -58,6 +58,11 @@ async fn index() -> impl Responder {
     NamedFile::open_async("./static/home.html").await
 }
 
+#[get("/favicon.ico")]
+async fn favicon() -> impl Responder {
+    NamedFile::open_async("./static/favicon.ico").await
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     tracing_subscriber::fmt()
@@ -95,6 +100,7 @@ async fn main() -> std::io::Result<()> {
             .service(audio_template)
             .service(text_template)
             .service(index)
+            .service(favicon)
             .service(
                 Files::new("/", &CONFIG.file_dir)
                     .use_etag(true)
