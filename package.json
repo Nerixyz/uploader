@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "format": "prettier -w \"{static,templates}/**/*.{js,css,html,ts,json,md}\" \"README.md\"",
+    "check-format": "prettier -c \"{static,templates}/**/*.{js,css,html,ts,json,md}\" \"README.md\""
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
+}

@@ -4,3 +4,4 @@
 .vscode
 uploads
 config.toml
+node_modules

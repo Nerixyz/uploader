@@ -6,12 +6,12 @@ but everyone can open the link.
 
 ## Notable Features
 
-* Filetypes are automatically inferred
-* Special views for text and audio files
+- Filetypes are automatically inferred
+- Special views for text and audio files
 
 ## Building and Running
 
-* Create a `config.toml` and configure your instance:
+- Create a `config.toml` and configure your instance:
 
 ```toml
 bind = "127.0.0.1:4833"
@@ -20,4 +20,4 @@ domain = "https://i.nerixyz.de"
 authorization = "Bearer <token>"
 ```
 
-* Build/Run the project `cargo b -r` or `cargo r -r`
+- Build/Run the project `cargo b -r` or `cargo r -r`
