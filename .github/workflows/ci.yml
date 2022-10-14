@@ -1,4 +1,4 @@
-name: Rust
+name: Ci
 
 on:
   push:
@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Rust Cache
+      uses: Swatinem/rust-cache@v2
     - name: Build
       run: cargo build --verbose
     - name: Run tests
@@ -40,5 +42,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
+          version: 7.x
           run_install: true
       - run: pnpm run check-format
