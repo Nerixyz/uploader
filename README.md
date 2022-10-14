@@ -21,3 +21,25 @@ authorization = "Bearer <token>"
 ```
 
 - Build/Run the project `cargo b -r` or `cargo r -r`
+
+## Usage
+
+You can upload either by sending a `multipart/form-data` request to `/upload` (the first field will be used) or by sending a `POST` request to `/upload`.
+In both cases a valid `Authorization` header must be used.
+
+## Screenshots
+
+### Home
+
+<img src="https://user-images.githubusercontent.com/19953266/195892956-0cb2bb14-f81d-4378-8ea6-97d8d02c2570.png" height="300px"/>
+
+### Text View
+
+<img src="https://user-images.githubusercontent.com/19953266/195894115-654a7661-9d10-4c09-bac7-c1ba0d20053c.png" height="300px"/>
+
+### Audio View
+
+<img src="https://user-images.githubusercontent.com/19953266/195894521-d1910407-54e6-412c-98af-e714ec6647e6.png" height="300px"/>
+
+
+
