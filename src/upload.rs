@@ -33,9 +33,6 @@ pub enum MultipartError {
 
 #[derive(Debug, thiserror::Error, actix_web_error::Json)]
 pub enum PostError {
-    #[error("No 'Content-Type' header found")]
-    #[status(400)]
-    MissingContentType,
     #[error("Upload error: {0}")]
     #[status(500)]
     Upload(UploadError<PayloadError>),
@@ -83,8 +80,8 @@ pub async fn upload_post(
     mut body: Payload,
     h: Option<Header<ContentType>>,
 ) -> Result<HttpResponse, PostError> {
-    let mime = h.map(|h| h.0 .0).ok_or(PostError::MissingContentType)?;
-    inner_upload(&mut body, Some(&mime))
+    let mime = h.map(|h| h.0 .0);
+    inner_upload(&mut body, mime.as_ref())
         .await
         .map_err(PostError::Upload)
 }
@@ -104,21 +101,21 @@ where
 
     let file_path = CONFIG.file_dir.join(&filename);
     let res = async move /* try */ {
-            let mut file = tokio::fs::File::create(file_path)
-                .await
-                .map_err(UploadError::Io)?;
+        let mut file = tokio::fs::File::create(file_path)
+            .await
+            .map_err(UploadError::Io)?;
 
-            if let Some(buf) = initial_buf {
-                file.write_all(&buf).await.map_err(UploadError::Io)?;
-            }
-
-            while let Some(item) = stream.next().await {
-                let item = item.map_err(UploadError::Inner)?;
-                file.write_all(&item).await.map_err(UploadError::Io)?;
-            }
-
-            Ok(())
+        if let Some(buf) = initial_buf {
+            file.write_all(&buf).await.map_err(UploadError::Io)?;
         }
+
+        while let Some(item) = stream.next().await {
+            let item = item.map_err(UploadError::Inner)?;
+            file.write_all(&item).await.map_err(UploadError::Io)?;
+        }
+
+        Ok(())
+    }
     .await;
 
     match res {
@@ -235,6 +232,7 @@ fn type_hint_from_infer(inf: &infer::Type) -> TypeHint {
 }
 
 struct UnsafePayload(Payload);
+
 unsafe impl Send for UnsafePayload {}
 
 impl Stream for UnsafePayload {
