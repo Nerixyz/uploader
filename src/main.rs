@@ -22,6 +22,7 @@ use crate::{
 
 mod auth;
 mod config;
+mod deletion;
 mod guards;
 mod rng;
 mod templates;
@@ -97,6 +98,8 @@ async fn main() -> std::io::Result<()> {
                     .use_etag(false)
                     .default_handler(fn_service(not_found_svc)),
             )
+            .service(deletion::service)
+            .service(deletion::view)
             .service(audio_template)
             .service(text_template)
             .service(index)

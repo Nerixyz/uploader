@@ -18,6 +18,10 @@ bind = "127.0.0.1:4833"
 file_dir = "uploads"
 domain = "https://i.nerixyz.de"
 authorization = "Bearer <token>"
+# Base64, Used for deletion links
+# Must be 28bytes (224bit) long
+# Use e.g. `openssl rand -base64 28` to generate
+secret = "..."
 ```
 
 - Build/Run the project `cargo b -r` or `cargo r -r`
@@ -26,6 +30,19 @@ authorization = "Bearer <token>"
 
 You can upload either by sending a `multipart/form-data` request to `/upload` (the first field will be used) or by sending a `POST` request to `/upload`.
 In both cases a valid `Authorization` header must be used.
+
+### Response
+
+```typescript
+type UploadResponse =
+  | {
+      error: string;
+    }
+  | {
+      link: string;
+      deletion_link: string;
+    };
+```
 
 ## Screenshots
 

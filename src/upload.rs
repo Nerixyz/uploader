@@ -16,7 +16,7 @@ use serde::Serialize;
 use tokio::io::AsyncWriteExt;
 use tracing::warn;
 
-use crate::{config::CONFIG, rng};
+use crate::{config::CONFIG, deletion, rng};
 
 #[derive(Debug, thiserror::Error, actix_web_error::Json)]
 pub enum MultipartError {
@@ -50,6 +50,7 @@ pub enum UploadError<E: fmt::Display + fmt::Debug> {
 #[derive(Serialize)]
 pub struct UploadResponse {
     link: String,
+    deletion_link: String,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -125,6 +126,11 @@ where
                 TypeHint::Audio => format!("{}/a/{filename}", CONFIG.domain),
                 TypeHint::Text => format!("{}/t/{filename}", CONFIG.domain),
             },
+            deletion_link: format!(
+                "{}/d/{filename}/{}",
+                CONFIG.domain,
+                deletion::make_key(&filename)
+            ),
         })),
         Err(e) => {
             warn!(error = ?e, "Couldn't upload");

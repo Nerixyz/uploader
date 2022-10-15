@@ -158,18 +158,21 @@ function createOverlay({ title, content }) {
   };
 }
 
-function createSuccess(link, cb) {
+function createSuccess({ link, deletionLink }, cb) {
   const wrap = document.createElement('div');
   wrap.classList.add('success');
 
   const linkInfoEl = document.createElement('div');
   linkInfoEl.classList.add('link-info');
 
+  const linkRow = document.createElement('div');
+  linkRow.classList.add('link-row');
+
   const linkEl = document.createElement('a');
   linkEl.href = link;
   linkEl.textContent = link;
   linkEl.target = '_blank';
-  linkInfoEl.append(linkEl);
+  linkRow.append(linkEl);
 
   const copyButton = document.createElement('button');
   copyButton.classList.add('icon-button');
@@ -200,8 +203,28 @@ function createSuccess(link, cb) {
       )
       .catch(console.error);
   });
+  linkRow.append(copyButton);
+  linkInfoEl.append(linkRow);
 
-  linkInfoEl.append(copyButton);
+  const copyDeletionButton = document.createElement('button');
+  copyDeletionButton.classList.add('icon-button');
+  copyDeletionButton.classList.add('no-border');
+  copyDeletionButton.textContent = 'Copy Deletion Link';
+  copyDeletionButton.append(svg.cloneNode(true));
+  copyDeletionButton.addEventListener('click', () => {
+    navigator.clipboard
+      .writeText(deletionLink)
+      .then(() =>
+        copyButton.animate(
+          {
+            transform: ['scale(1)', 'scale(1.1)', 'scale(1)'],
+          },
+          { duration: 150 },
+        ),
+      )
+      .catch(console.error);
+  });
+  linkInfoEl.append(copyDeletionButton);
 
   wrap.append(linkInfoEl);
 
@@ -264,8 +287,8 @@ async function uploadFile(file) {
   const [content, progressCb] = createUploading();
   const overlay = createOverlay({ title: 'Uploading...', content });
   try {
-    const link = await upload(file, progressCb);
-    overlay.update({ title: 'Done', content: createSuccess(link, () => overlay.remove()) });
+    const links = await upload(file, progressCb);
+    overlay.update({ title: 'Done', content: createSuccess(links, () => overlay.remove()) });
   } catch (e) {
     overlay.update({ title: 'Error', content: createError(e.toString(), () => overlay.remove()) });
   }
@@ -280,11 +303,11 @@ function upload(file, progressCb) {
     xhr.addEventListener('load', () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         try {
-          const { link } = JSON.parse(xhr.responseText);
-          if (!link) {
-            throw new Error('No link in response');
+          const { link, deletion_link } = JSON.parse(xhr.responseText);
+          if (!link || !deletion_link) {
+            throw new Error('No links in response');
           }
-          resolve(link);
+          resolve({ link, deletionLink: deletion_link });
         } catch (e) {
           reject(e);
         }
