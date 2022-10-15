@@ -1,5 +1,7 @@
 :root {
   --theme: #45f;
+  --selection-color: #45f;
+  --selection-text: #eee;
 }
 
 html {
@@ -11,6 +13,22 @@ body {
   margin: 0;
   background: #121212;
   height: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+}
+
+*::selection {
+  color: var(--selection-text);
+  background-color: var(--selection-color);
 }
 
 .bg-wrap {

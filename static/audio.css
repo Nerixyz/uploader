@@ -17,13 +17,17 @@ audio {
 .controls {
   padding: 0 2rem;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
   gap: 0.75rem;
 }
 
 .range-group {
   display: flex;
   gap: 0.25rem;
+}
+
+#playback-speed {
+  flex-grow: 1;
 }
 
 .range-button {
