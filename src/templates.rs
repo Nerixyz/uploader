@@ -27,5 +27,5 @@ pub async fn audio_template(path: Path<String>) -> Result<HttpResponse, Template
 
 #[get("/t/{name}")]
 pub async fn text_template() -> impl Responder {
-    NamedFile::open_async("static/text.html").await
+    NamedFile::open_async("./static/pages/text/text.html").await
 }

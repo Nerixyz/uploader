@@ -56,7 +56,7 @@ fn not_found_svc_short(
 
 #[get("/")]
 async fn index() -> impl Responder {
-    NamedFile::open_async("./static/home.html").await
+    NamedFile::open_async("./static/pages/home/home.html").await
 }
 
 #[get("/favicon.ico")]
