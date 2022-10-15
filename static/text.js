@@ -1,3 +1,5 @@
+const AUTO_HIGHLIGHT_KEY = 'uploader-autohighlight';
+
 function getFilename() {
   const idx = location.pathname.lastIndexOf('/');
   if (idx === -1) {
@@ -22,6 +24,7 @@ function getFilename() {
     return;
   }
   const text = await res.text();
+  const view = document.getElementById('view');
   const textView = document.getElementById('text-view');
   textView.textContent = text;
 
@@ -48,5 +51,42 @@ function getFilename() {
     a.download = file.substring(1);
     a.click();
   });
-  document.getElementById('view').classList.remove('loading');
+  view.classList.remove('loading');
+
+  document.getElementById('highlight-btn').addEventListener('click', () => {
+    highlightText({ textView, view });
+  });
+
+  const autoHighlightOpt = document.getElementById('auto-highlight');
+  autoHighlightOpt.addEventListener('input', () => {
+    localStorage.setItem(AUTO_HIGHLIGHT_KEY, autoHighlightOpt.checked.toString());
+  });
+
+  if (localStorage.getItem(AUTO_HIGHLIGHT_KEY) === 'true') {
+    autoHighlightOpt.checked = true;
+    highlightText({ textView, view });
+  }
 })();
+
+async function highlightText({ textView, view }) {
+  const STYLESHEET_URL = '/static/lib/hljs-github-dark.min.css';
+  try {
+    view.classList.add('highlighting');
+
+    {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = STYLESHEET_URL;
+      document.head.append(link);
+    }
+
+    const { default: hljs } = await import('/static/lib/highlight.min.js');
+    hljs.highlightElement(textView);
+
+    view.classList.add('highlighted');
+  } catch (e) {
+    console.warn('Failed to highlight text', e);
+  } finally {
+    view.classList.remove('highlighting');
+  }
+}
