@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Delete File</title>
+    <style>
+      body {
+        background: #121212;
+        color: #eee;
+      }
+    </style>
+    <link rel="stylesheet" href="/static/common.css" />
+    <link rel="stylesheet" href="/static/delete.css" />
+    <script defer src="/static/delete.js"></script>
+  </head>
+  <body>
+    <div class="bg-wrap">
+      <main id="view" class="stage-prompt">
+        <div class="prompt">
+          <h1>Are you sure you want to delete this file?</h1>
+          <div class="deletion-buttons">
+            <button class="icon-button col-red no-border" id="btn-no">No</button>
+            <button class="icon-button" id="btn-yes">Yes</button>
+          </div>
+        </div>
+        <div class="loader"></div>
+        <div class="deleted">
+          <h1>Your file was deleted!</h1>
+        </div>
+        <div class="error">
+          <h1>An error occurred</h1>
+          <h3 id="error-message"></h3>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

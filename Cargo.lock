@@ -1337,6 +1337,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha2"
+version = "0.10.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82e6b795fe2e3b1e845bafcb27aa35405c4d47cdfc92af5fc8d3002f76cebdc0"
+dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "digest",
+]
+
+[[package]]
 name = "sharded-slab"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1638,8 +1649,10 @@ dependencies = [
  "actix-web-error",
  "actix-web-lab",
  "askama",
+ "base64",
  "bytes",
  "futures",
+ "hmac",
  "infer",
  "mime",
  "mime_guess",
@@ -1648,6 +1661,7 @@ dependencies = [
  "rand",
  "serde",
  "serde_json",
+ "sha2",
  "thiserror",
  "tokio",
  "toml",

@@ -1,0 +1,33 @@
+#view:not(.stage-prompt) > .prompt {
+  display: none;
+}
+
+#view:not(.stage-loading) > .loader {
+  display: none;
+}
+
+#view:not(.stage-deleted) > .deleted {
+  display: none;
+}
+
+#view:not(.stage-error) > .error {
+  display: none;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.deletion-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.deletion-buttons button {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.deleted h1 {
+  margin-bottom: 0;
+}

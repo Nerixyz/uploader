@@ -215,6 +215,14 @@ input[type='text']:focus-visible {
   justify-content: center;
   align-items: center;
   padding: 1rem 2rem;
+  flex-direction: column;
+}
+
+.success > .link-info > .link-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .success a,
