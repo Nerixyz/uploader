@@ -39,6 +39,7 @@ main {
   margin-top: 1rem;
   padding: 0 0.8rem;
   box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 #set-auth-form > input[type='text'] {
