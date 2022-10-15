@@ -9,8 +9,14 @@
 .buttons {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   animation: fade-in 500ms;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.buttons > * {
+  flex-grow: 1;
 }
 
 @keyframes fade-in {
@@ -22,10 +28,45 @@
   }
 }
 
+#auto-highlight-lbl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: 150ms;
+  transform: scale(1);
+  transition-property: background, transform;
+}
+
+#auto-highlight-lbl:is(:hover, :focus-visible) {
+  background: #fff1;
+  outline: none;
+}
+
+#auto-highlight-lbl:active {
+  background: #fff2;
+  transform: scale(0.975);
+}
+
 main.loading > :is(.buttons, #text-view) {
   display: none;
 }
 
 main:not(.loading) > .loader {
+  display: none;
+}
+
+main:is(.highlighted, .highlighting) #highlight-btn {
+  display: none;
+}
+
+main:not(.highlighted) #auto-highlight-lbl {
+  display: none;
+}
+
+main:not(.highlighting) .highlight-loader {
   display: none;
 }
