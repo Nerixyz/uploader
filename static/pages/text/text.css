@@ -1,3 +1,7 @@
+main {
+  max-width: min(80rem, 100vw - 8rem);
+}
+
 #text-view {
   white-space: pre-wrap;
   font-family: 'JetBrains Mono', monospace;

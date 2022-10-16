@@ -43,8 +43,36 @@ function makeUploadStuff() {
   const fileInput = document.getElementById('upload-file');
   const fileLabelWrap = document.getElementById('file-label');
   const fileText = document.getElementById('filename');
+  const fileModeBtn = document.getElementById('file-mode-btn');
+  const textModeBtn = document.getElementById('text-mode-btn');
+  const view = document.getElementById('view');
+  const textInput = document.getElementById('text-input');
+
   const noFilenameText = fileText.textContent;
 
+  // MODES
+  let fileMode = view.classList.contains('file-mode');
+  const updateMode = () => {
+    if (fileMode) {
+      view.classList.add('file-mode');
+      view.classList.remove('text-mode');
+    } else {
+      view.classList.add('text-mode');
+      view.classList.remove('file-mode');
+    }
+  };
+  updateMode();
+
+  fileModeBtn.addEventListener('click', () => {
+    fileMode = true;
+    updateMode();
+  });
+  textModeBtn.addEventListener('click', () => {
+    fileMode = false;
+    updateMode();
+  });
+
+  // FILE UPLOAD
   let currentFile = null;
   let dragRc = 0;
   let dndDialog = null;
@@ -58,8 +86,17 @@ function makeUploadStuff() {
 
   uploadForm.addEventListener('submit', e => {
     e.preventDefault();
-    if (currentFile) {
-      uploadFile(currentFile).catch(console.error);
+    let toUpload = null;
+    if (fileMode) {
+      toUpload = currentFile;
+    } else {
+      // text mode
+      if (textInput.value.length > 0) {
+        toUpload = new Blob([textInput.value], { type: 'text/plain' });
+      }
+    }
+    if (toUpload) {
+      uploadFile(toUpload).catch(console.error);
     }
   });
   const updateFilename = (fromInput = false) => {
