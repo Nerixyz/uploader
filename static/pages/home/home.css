@@ -92,7 +92,7 @@ input[type='text'] {
   padding: 0.75rem 1rem;
   transition: 150ms;
   transition-property: background, border;
-  font-family: sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 input[type='text']:is(:hover, :focus-visible) {
@@ -229,6 +229,6 @@ input[type='text']:focus-visible {
 .success a,
 .success a:visited {
   color: var(--theme);
-  font-family: sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1.2rem;
 }

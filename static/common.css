@@ -1,3 +1,5 @@
+@import url('/static/fonts/fonts.css');
+
 :root {
   --theme: #45f;
   --selection-color: #45f;
@@ -6,7 +8,7 @@
 
 html {
   height: 100%;
-  font-family: sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 body {

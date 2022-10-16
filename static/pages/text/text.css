@@ -1,6 +1,6 @@
 #text-view {
   white-space: pre-wrap;
-  font-family: monospace;
+  font-family: 'JetBrains Mono', monospace;
   opacity: 1;
   transition: opacity 150ms;
   animation: fade-in 500ms;
