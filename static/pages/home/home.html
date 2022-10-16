@@ -19,13 +19,13 @@
 
   <body>
     <div class="bg-wrap">
-      <main id="view">
+      <main id="view" class="file-mode">
         <h1>Hi</h1>
         <h2>This is my funny file uploader!</h2>
         <div class="no-auth">
           <p>To upload, enter your authorization here</p>
           <form id="set-auth-form" autocomplete="off">
-            <input id="auth-input" type="text" placeholder="Authorization" />
+            <input id="auth-input" type="text" placeholder="Authorization" title="Authorization" />
             <label class="icon-button">
               <input type="submit" value="Save" />
               <svg viewBox="0 0 24 24">
@@ -38,9 +38,14 @@
           </form>
         </div>
         <div class="auth">
-          <p>Upload your file</p>
+          <p>
+            Upload your
+            <button class="inline-button" id="file-mode-btn" tabindex="1">file</button> or
+            <button class="inline-button" id="text-mode-btn" tabindex="2">text</button>
+          </p>
           <form id="upload-form">
-            <label id="file-label" for="upload-file" tabindex="1">
+            <!-- FILE -->
+            <label id="file-label" for="upload-file" tabindex="10">
               <svg class="not-selected" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
@@ -55,9 +60,16 @@
               </svg>
               <span id="filename">Choose or drag a file...</span>
             </label>
+            <!-- TEXT -->
+            <textarea
+              id="text-input"
+              title="Text input"
+              placeholder="Type your text here..."
+              tabindex="10"
+            ></textarea>
             <input hidden id="upload-file" type="file" tabindex="-1" />
             <div class="actions">
-              <button class="icon-button no-border col-red" id="clear-auth" tabindex="3">
+              <button class="icon-button no-border col-red" id="clear-auth" tabindex="12">
                 Clear Auth
                 <svg viewBox="0 0 24 24">
                   <path
@@ -66,7 +78,7 @@
                   />
                 </svg>
               </button>
-              <label class="icon-button submit" tabindex="2">
+              <label class="icon-button submit" tabindex="11">
                 <input type="submit" value="Upload" tabindex="-1" />
                 <svg viewBox="0 0 24 24">
                   <path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
@@ -76,7 +88,7 @@
           </form>
         </div>
         <div class="links">
-          <a href="https://github.com/nerixyz/uploader" class="icon-link">
+          <a href="https://github.com/nerixyz/uploader" class="icon-link" tabindex="20">
             <svg viewBox="0 0 24 24">
               <path
                 fill="currentColor"

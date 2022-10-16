@@ -21,7 +21,13 @@ p {
 }
 
 main {
+  transition: min-width 250ms cubic-bezier(0.18, 0.56, 0.25, 1), background 150ms, box-shadow 150ms;
+
   min-width: min(30rem, 100vw - 8rem);
+}
+
+main.text-mode {
+  min-width: min(50rem, 100vw - 8rem);
 }
 
 #view:not(.authenticated) > .auth {
@@ -46,7 +52,43 @@ main {
   flex-grow: 1;
 }
 
-/* FILE UPLOAD */
+input[type='text'] {
+  background: transparent;
+  border: solid 1px #fff3;
+  color: #eee;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: 150ms;
+  transition-property: background, border;
+  font-family: 'Open Sans', sans-serif;
+}
+
+input[type='text']:is(:hover, :focus-visible) {
+  outline: none;
+  background: #fff1;
+}
+
+input[type='text']:focus-visible {
+  border-color: #56f5;
+}
+
+/* UPLOAD */
+
+#upload-form {
+  box-sizing: border-box;
+}
+
+#view.file-mode #file-mode-btn,
+#view.text-mode #text-mode-btn {
+  border-color: var(--theme);
+}
+
+#view:not(.file-mode) #file-label,
+#view:not(.text-mode) #text-input {
+  display: none;
+}
+
+/* FILE */
 
 #file-label {
   display: flex;
@@ -84,25 +126,69 @@ main {
   height: 2rem;
 }
 
-input[type='text'] {
-  background: transparent;
-  border: solid 1px #fff3;
-  color: #eee;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  transition: 150ms;
-  transition-property: background, border;
+/* TEXT */
+
+.inline-button {
+  background: #ffffff10;
+  border: 2px solid transparent;
+  padding: 0.2rem 0.75rem;
+  border-radius: 1rem;
   font-family: 'Open Sans', sans-serif;
+  color: inherit;
+  font-size: 1rem;
+  transform: none;
+  transition: 150ms;
+  transition-property: border, background, transform;
+  cursor: pointer;
 }
 
-input[type='text']:is(:hover, :focus-visible) {
+.inline-button:is(:hover, :focus-visible) {
+  background: #fff2;
   outline: none;
-  background: #fff1;
 }
 
-input[type='text']:focus-visible {
-  border-color: #56f5;
+.inline-button:active {
+  transform: scale(1.05);
 }
+
+#text-input {
+  resize: none;
+  width: 100%;
+  height: 20rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  background: transparent;
+  color: inherit;
+  border: 2px solid #fff5;
+  border-radius: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  scrollbar-color: #343434 transparent;
+  transition: 150ms;
+  transition-property: border, background;
+  white-space: pre;
+}
+
+#text-input::-webkit-scrollbar-thumb {
+  background: #343434;
+}
+
+#text-input::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#text-input:hover {
+  background: #0003;
+}
+
+#text-input:focus-visible {
+  outline: none;
+  border-color: var(--theme);
+  background: #0005;
+}
+
+/* CLEAR and UPLOAD */
 
 .actions {
   display: flex;
