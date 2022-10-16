@@ -135,6 +135,8 @@ function makeUploadStuff() {
     if (e.dataTransfer?.files?.length) {
       currentFile = e.dataTransfer.files[0];
       updateFilename(false);
+      fileMode = true;
+      updateMode();
     }
   });
   document.body.addEventListener('dragleave', () => {
