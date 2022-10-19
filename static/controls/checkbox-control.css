@@ -1,0 +1,23 @@
+.checkbox {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.checkbox .tick {
+    transition: 300ms cubic-bezier(.06,.64,.28,.99);
+    transition-property: stroke-dashoffset, stroke-dasharray, opacity, transform;
+    transform-origin: center;
+}
+
+.checkbox.ticked .tick {
+    stroke-dashoffset: 5%;
+    stroke-dasharray: 100%;
+    opacity: 1;
+    transform: scale(1);
+}
+.checkbox:not(.ticked) .tick {
+    stroke-dashoffset: 100%;
+    stroke-dasharray: 100%;
+    opacity: 0;
+    transform: scale(0.8);
+}

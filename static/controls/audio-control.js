@@ -1,3 +1,17 @@
+import {
+  addClass,
+  clamp,
+  condClass,
+  makeButton,
+  makeSvg,
+  remClass,
+  withClass,
+} from '../lib/dom-tools.js';
+
+const PLAY_SVG = 'M8,5.14V19.14L19,12.14L8,5.14Z';
+const PAUSE_SVG = 'M14,19H18V5H14M6,19H10V5H6V19Z';
+const REPEAT_SVG = 'M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z';
+
 export class AudioControl extends HTMLElement {
   static get observedAttributes() {
     return ['src'];
@@ -6,21 +20,35 @@ export class AudioControl extends HTMLElement {
   /** @type {HTMLAudioElement | null} */
   #audio = null;
 
-  /** @type {HTMLDivElement | null} */
-  #knob = null;
-  /** @type {HTMLDivElement | null} */
-  #played = null;
-  /** @type {HTMLDivElement | null} */
-  #track = null;
-  /** @type {HTMLDivElement | null} */
-  #buffered = null;
-  /** @type {HTMLDivElement | null} */
-  #trackWrap = null;
+  /** @type {import('./slider-control').SliderControl | null} */
+  #slider = null;
 
   /** @type {HTMLDivElement | null} */
   #container = null;
   /** @type {HTMLSpanElement | null} */
   #timeLbl = null;
+
+  /** @type {HTMLButtonElement | null} */
+  #playBtn = null;
+  /** @type {HTMLButtonElement | null} */
+  #pauseBtn = null;
+  /** @type {HTMLButtonElement | null} */
+  #repeatBtn = null;
+
+  #dragging = false;
+
+  set playbackRate(rate) {
+    this.#audio.playbackRate = rate;
+  }
+
+  set preservesPitch(pp) {
+    this.#audio.preservesPitch = pp;
+    this.#audio.mozPreservesPitch = pp;
+  }
+
+  get preservedPitch() {
+    return this.#audio.preservesPitch ?? this.#audio.mozPreservesPitch;
+  }
 
   constructor() {
     super();
@@ -30,90 +58,116 @@ export class AudioControl extends HTMLElement {
   #init() {
     const shadow = this.attachShadow({ mode: 'open' });
 
-    // Create audio
-    this.#audio = document.createElement('audio');
-    this.#audio.src = this.getAttribute('src');
-
-    // Create trackWrapper
-    this.#trackWrap = withClass('div', 'track-wrap');
-
-    // Create track
-    this.#track = withClass('div', 'track');
-
-    // Create buffered
-    this.#buffered = withClass('div', 'buffered');
-
-    // Create played
-    this.#played = withClass('div', 'played');
-
-    // Create knob
-    this.#knob = withClass('div', 'knob');
-
-    this.#track.appendChild(this.#buffered);
-    this.#track.appendChild(this.#played);
-    this.#track.appendChild(this.#knob);
-
-    this.#trackWrap.appendChild(this.#track);
-
-    this.#timeLbl = withClass('div', 'time');
-    this.#timeLbl.textContent = '0:00 /';
-
-    this.#container = withClass('div', 'contianer');
-    this.#container.appendChild(this.#trackWrap);
-    this.#container.appendChild(this.#timeLbl);
-
     const style = document.createElement('link');
     style.rel = 'stylesheet';
     const url = new URL(import.meta.url);
     style.href = `${url.origin}/static/controls/audio-control.css`;
 
+    shadow.appendChild(style);
+
+    // Create audio
+    this.#audio = document.createElement('audio');
+    this.#audio.src = this.getAttribute('src');
+
+    this.#slider = withClass('slider-control', 'progress');
+    this.#slider.formatter = fmtAriaTime;
+
+    this.#timeLbl = withClass('span', 'time');
+    this.#timeLbl.textContent = '0:00 /';
+
+    this.#playBtn = makeButton(makeSvg(PLAY_SVG), 'Play', 'play');
+    this.#pauseBtn = makeButton(makeSvg(PAUSE_SVG), 'Pause', 'pause');
+    const loading = withClass('div', 'loader');
+
+    this.#repeatBtn = makeButton(makeSvg(REPEAT_SVG), 'Repeat', 'repeat');
+
+    this.#container = withClass('div', 'container');
+    this.#container.appendChild(this.#playBtn);
+    this.#container.appendChild(this.#pauseBtn);
+    this.#container.appendChild(loading);
+    this.#container.appendChild(this.#repeatBtn);
+    this.#container.appendChild(this.#slider);
+    this.#container.appendChild(this.#timeLbl);
+    addClass(this.#container, 'loading');
+
     shadow.appendChild(this.#audio);
     shadow.appendChild(this.#container);
-    shadow.appendChild(style);
     this.#connectEvents();
   }
 
   #connectEvents() {
-    this.#track.addEventListener('mousedown', e => {
-      e.preventDefault();
-      this.#showPosition(e.clientX);
-      addClass(this.#track, 'dragging');
-
-      const controller = new AbortController();
-      document.addEventListener(
-        'mouseup',
-        e => {
-          controller.abort();
-          this.#applyPosition(e.clientX);
-          remClass(this.#track, 'dragging');
-        },
-        { once: true },
-      );
-      document.addEventListener(
-        'mousemove',
-        e => {
-          this.#showPosition(e.clientX);
-        },
-        { signal: controller.signal },
-      );
+    this.#audio.addEventListener('timeupdate', () => {
+      if (!this.#dragging) {
+        this.#updateSliderMeta();
+      }
+      this.#updateLabel();
     });
+    this.#audio.addEventListener('durationchange', () => {
+      this.#updateSliderMeta();
+      this.#updateLabel();
+    });
+
+    this.#slider.addEventListener('value-changed', () => {
+      this.#audio.currentTime = this.#slider.value;
+    });
+    this.#slider.addEventListener('drag-knob-start', () => (this.#dragging = true));
+    this.#slider.addEventListener('drag-knob-end', () => (this.#dragging = false));
+
+    this.#audio.addEventListener('canplay', () => {
+      remClass(this.#container, 'loading');
+      remClass(this.#container, 'playing');
+      addClass(this.#container, 'paused');
+    });
+    this.#audio.addEventListener('playing', () => {
+      remClass(this.#container, 'loading');
+      remClass(this.#container, 'paused');
+      addClass(this.#container, 'playing');
+    });
+    this.#audio.addEventListener('pause', () => {
+      remClass(this.#container, 'loading');
+      remClass(this.#container, 'playing');
+      addClass(this.#container, 'paused');
+    });
+    this.#audio.addEventListener('waiting', () => {
+      remClass(this.#container, 'playing');
+      remClass(this.#container, 'paused');
+      addClass(this.#container, 'loading');
+    });
+    this.#playBtn.addEventListener('click', () => {
+      this.#audio.play().catch(console.warn);
+    });
+    this.#pauseBtn.addEventListener('click', () => {
+      this.#audio.pause();
+    });
+    this.#repeatBtn.addEventListener('click', () => {
+      this.#audio.loop = !this.#audio.loop;
+      condClass(this.#container, 'loop', this.#audio.loop);
+    });
+    condClass(this.#container, 'loop', this.#audio.loop);
   }
 
-  #calcPosition(x) {
-    const bounds = this.#track.getBoundingClientRect();
-    return (
-      (clamp(x, bounds.x + bounds.height / 2, bounds.x + bounds.width - bounds.height / 2) -
-        (bounds.x + bounds.height / 2)) /
-      (bounds.width - bounds.height)
-    );
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'src') {
+      this.#audio.src = newValue;
+    }
   }
 
-  #showPosition(x) {
-    this.#track.style.setProperty('--prog', this.#calcPosition(x).toString());
+  #updateSliderMeta() {
+    if (this.#slider.min !== 0) {
+      this.#slider.min = 0;
+    }
+    if (this.#slider.max !== this.#audio.duration) {
+      this.#slider.max = this.#audio.duration;
+    }
+    if (this.#slider.value !== this.#audio.currentTime) {
+      this.#slider.value = this.#audio.currentTime;
+    }
   }
 
-  #applyPosition(x) {
-    this.#audio.currentTime = this.#calcPosition(x) * this.#audio.duration;
+  #updateLabel() {
+    this.#timeLbl.textContent = `${fmtTime(this.#audio.currentTime)} / ${fmtTime(
+      this.#audio.duration,
+    )}`;
   }
 }
 
@@ -122,54 +176,37 @@ if (!customElements.get('audio-control')) {
 }
 
 /**
- * @template {HTMLElement} T
- * @param {T} el
- * @param {string} name
- * @returns {T}
+ * @param {number} time seconds
  */
-function addClass(el, name) {
-  el.classList.add(name);
-  return el;
-}
+function fmtTime(time) {
+  const seconds = time % 60 | 0;
+  time /= 60;
+  const minutes = time % 60 | 0;
+  time /= 60;
+  const hours = time | 0;
 
-/**
- * @template {HTMLElement} T
- * @param {T} el
- * @param {string} name
- * @returns {T}
- */
-function remClass(el, name) {
-  el.classList.remove(name);
-  return el;
-}
-
-/**
- * @template {HTMLElement} T
- * @param {T} el
- * @param {string} name
- * @param {boolean} cond
- * @return {T}
- */
-function condClass(el, name, cond) {
-  if (cond) {
-    addClass(el, name);
+  if (hours > 0) {
+    return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
   } else {
-    remClass(el, name);
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
-  return el;
 }
 
 /**
- * @template {keyof HTMLElementTagNameMap} K
- * @param {K} typ
- * @param {string} name
- * @returns {HTMLElementTagNameMap[K]}
+ * @param {number} time seconds
  */
-function withClass(typ, name) {
-  const el = document.createElement(typ);
-  return addClass(el, name);
-}
+function fmtAriaTime(time) {
+  const seconds = time % 60 | 0;
+  time /= 60;
+  const minutes = time % 60 | 0;
+  time /= 60;
+  const hours = time | 0;
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
+  if (hours > 0) {
+    return `${hours.toString()} hours, ${minutes.toString()} minutes, ${seconds.toString()} seconds`;
+  } else {
+    return `${minutes.toString()} minutes, ${seconds.toString()} seconds`;
+  }
 }

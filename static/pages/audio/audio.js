@@ -6,16 +6,15 @@
   const preservePitchEl = document.getElementById('preserve-pitch');
 
   const updatePlaybackSpeed = () => {
-    audioEl.playbackRate = playbackSpeedEl.valueAsNumber;
-    playbackSpeedLbl.textContent = `${playbackSpeedEl.valueAsNumber.toFixed(1)}x`;
+    audioEl.playbackRate = playbackSpeedEl.value;
+    playbackSpeedLbl.textContent = `${playbackSpeedEl.value.toFixed(1)}x`;
   };
   const updatePreservePitch = () => {
     audioEl.preservesPitch = preservePitchEl.checked;
-    audioEl.mozPreservesPitch = audioEl.preservesPitch;
   };
-  playbackSpeedEl.addEventListener('input', updatePlaybackSpeed);
+  playbackSpeedEl.addEventListener('value-changed', updatePlaybackSpeed);
   resetPlaybackSpeedEl.addEventListener('click', () => {
-    playbackSpeedEl.value = '1';
+    playbackSpeedEl.value = 1;
     updatePlaybackSpeed();
   });
   preservePitchEl.addEventListener('input', updatePreservePitch);

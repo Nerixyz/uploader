@@ -5,68 +5,82 @@
   align-items: center;
 }
 
-.track-wrap {
-  --default-track-height: 0.7rem;
-  --default-theme: #45f;
-  --t-height: var(--track-height, var(--default-track-height));
-  --el-height: calc(var(--t-height));
-  --prog: 0.05;
-  --buf-from: 0.1;
-  --buf-to: 0.6;
-
-  width: 100%;
-  position: relative;
+.time {
+  white-space: nowrap;
 }
 
-.track {
-  position: relative;
-  z-index: 1;
-  height: var(--t-height);
-  background: #fff1;
-  border-radius: var(--t-height);
-  border: #fff3 solid 1px;
+.progress {
+  flex-grow: 1;
 }
 
-.buffered {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: calc((var(--buf-from)) * (100% - 2px));
-  right: calc((1 - var(--buf-to)) * (100% - 2px));
-  height: var(--t-height);
-  border-radius: var(--t-height);
-  background: #fff2;
+.container:not(.playing) .pause,
+.container:not(.paused) .play,
+.container:not(.loading) .loader {
+  display: none;
 }
 
-.played {
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 0;
-  right: calc((1 - var(--prog)) * (100% - var(--t-height)) + var(--t-height) / 2);
-  height: var(--t-height);
-  background: var(--theme);
-  border-radius: var(--t-height) 0 0 var(--t-height);
-  opacity: 0.6;
-  transition: 150ms right cubic-bezier(0.18, 0.56, 0.25, 1);
-}
+button:is(.play, .pause, .repeat) {
+  background: transparent;
+  color: var(--theme);
 
-.knob {
-  position: absolute;
-  z-index: 4;
-  top: 0;
-  left: calc(var(--prog) * (100% - var(--t-height)));
-  height: var(--t-height);
-  width: var(--t-height);
-  background: var(--theme, --default-theme);
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 150ms;
+  transition-property: border-color, background, color;
+  gap: 0.5rem;
+  border: none;
+  padding: 0.2rem;
   border-radius: 100%;
-  box-shadow: #000a 0 0 5px 0;
-  transition: 150ms cubic-bezier(0.18, 0.56, 0.25, 1);
-  transition-property: left, transform;
-  transform: scale(1);
 }
 
-.track.dragging .knob,
-.track:hover .knob {
-  transform: scale(2);
+button:is(.play, .pause, .repeat):is(:hover, :focus-visible) {
+  outline: none;
+  border-color: #fff9;
+  background: #fff1;
+}
+
+button:is(.play, .pause, .repeat):active {
+  outline: none;
+  border-color: transparent;
+  color: black;
+  background: var(--theme);
+}
+
+button:is(.play, .pause, .repeat) > svg {
+  width: 1.5rem;
+}
+
+.container:not(.loop) button.repeat:not(:active) {
+  color: #fff5;
+}
+
+.loader {
+  width: 2.5rem;
+  margin: 0.2rem;
+  height: 3px;
+  background: #45f;
+  border-radius: 2px;
+  animation: loader-loading infinite 1s cubic-bezier(0.75, 0, 0.25, 1);
+}
+
+@keyframes loader-loading {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  51% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
 }
