@@ -1,6 +1,6 @@
-import { addClass, makeEmptySvg, makePath, withClass } from '../lib/dom-tools.js';
+import { addClass, condClass, makeEmptySvg, makePath, withClass } from '../lib/dom-tools.js';
 
-const TICK_PATH = "M 4.205 12.795 L 9 17.585 L 20.295 6.295";
+const TICK_PATH = 'M 4.205 12.795 L 9 17.585 L 20.295 6.295';
 
 export class CheckboxControl extends HTMLElement {
   static get observedAttributes() {
@@ -22,7 +22,7 @@ export class CheckboxControl extends HTMLElement {
       return;
     }
     this.#checked = checked;
-    // TODO
+    this.#updateState();
   }
 
   constructor() {
@@ -31,25 +31,34 @@ export class CheckboxControl extends HTMLElement {
   }
 
   #init() {
-    const shadow = this.attachShadow({mode: 'open'});
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    const url = new URL(import.meta.url);
+    style.href = `${url.origin}/static/controls/checkbox-control.css`;
+
+    shadow.appendChild(style);
 
     this.#box = withClass('div', 'box');
     const svg = makeEmptySvg();
-    const path = addClass(makePath(TICK_PATH, 'transparent', 'currentColor'), 'tick');
+    const path = makePath(TICK_PATH, 'transparent');
     svg.appendChild(path);
     this.#box.appendChild(svg);
 
-    this.#wrap = withClass('div', 'wrap');
+    this.#wrap = withClass('button', 'wrap');
     this.#wrap.appendChild(this.#box);
     this.#wrap.setAttribute('tabindex', '0');
     shadow.appendChild(this.#wrap);
 
     this.#connectEvents();
+    this.#updateState();
+    this.dispatchEvent(new ValueChangedEvent(this.value));
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'checked') {
-      this.checked = newValue && newValue !== 'false';
+      this.checked = newValue !== null && newValue !== 'false';
     }
   }
 
@@ -59,6 +68,10 @@ export class CheckboxControl extends HTMLElement {
       this.checked = !this.checked;
       this.dispatchEvent(new ValueChangedEvent(this.checked));
     });
+  }
+
+  #updateState() {
+    condClass(this.#box, 'checked', this.#checked);
   }
 }
 

@@ -122,6 +122,7 @@ export class SliderControl extends HTMLElement {
     this.max = Number(this.getAttribute('max') ?? this.#max);
     this.value = Number(this.getAttribute('value') ?? this.#value);
     this.smallChange = Number(this.getAttribute('small-change') ?? this.#smallChange);
+    this.dispatchEvent(new ValueChangedEvent(this.value, false));
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -174,7 +175,7 @@ export class SliderControl extends HTMLElement {
     });
 
     this.#trackWrap.addEventListener('keydown', e => {
-      const emit = (v) => {
+      const emit = v => {
         this.#value = clamp(v, this.#min, this.#max);
         this.#updateFromValue();
         this.dispatchEvent(new ValueChangedEvent(this.#value, false));

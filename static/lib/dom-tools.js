@@ -51,7 +51,7 @@ export function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-export function makePath(pathData, fill = "currentColor", stroke) {
+export function makePath(pathData, fill = 'currentColor', stroke) {
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   path.setAttribute('d', pathData);
   path.setAttribute('fill', fill);

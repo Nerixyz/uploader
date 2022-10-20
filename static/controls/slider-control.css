@@ -1,54 +1,54 @@
 .track-wrap {
-    --default-track-height: 0.7rem;
-    --default-theme: #45f;
-    --t-height: var(--track-height, var(--default-track-height));
-    --el-height: calc(var(--t-height));
-    --prog: 0.05;
+  --default-track-height: 0.7rem;
+  --default-theme: #45f;
+  --t-height: var(--track-height, var(--default-track-height));
+  --el-height: calc(var(--t-height));
+  --prog: 0.05;
 
-    width: 100%;
-    position: relative;
+  width: 100%;
+  position: relative;
 }
 
 .track-wrap:focus-visible {
-    outline: none;
+  outline: none;
 }
 
 .track {
-    position: relative;
-    height: var(--t-height);
-    background: #fff1;
-    border-radius: var(--t-height);
-    border: #fff3 solid 1px;
+  position: relative;
+  height: var(--t-height);
+  background: #fff1;
+  border-radius: var(--t-height);
+  border: #fff3 solid 1px;
 }
 
 .active-track {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: calc((1 - var(--prog)) * (100% - var(--t-height)) + var(--t-height) / 2);
-    height: var(--t-height);
-    background: var(--theme);
-    border-radius: var(--t-height) 0 0 var(--t-height);
-    opacity: 0.6;
-    transition: 150ms right cubic-bezier(0.18, 0.56, 0.25, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: calc((1 - var(--prog)) * (100% - var(--t-height)) + var(--t-height) / 2);
+  height: var(--t-height);
+  background: var(--theme);
+  border-radius: var(--t-height) 0 0 var(--t-height);
+  opacity: 0.6;
+  transition: 150ms right cubic-bezier(0.18, 0.56, 0.25, 1);
 }
 
 .knob {
-    position: absolute;
-    top: 0;
-    left: calc(var(--prog) * (100% - var(--t-height)));
-    height: var(--t-height);
-    width: var(--t-height);
-    background: var(--theme, --default-theme);
-    border-radius: 100%;
-    box-shadow: #000a 0 0 5px 0;
-    transition: 150ms cubic-bezier(0.18, 0.56, 0.25, 1);
-    transition-property: left, transform;
-    transform: scale(1);
+  position: absolute;
+  top: 0;
+  left: calc(var(--prog) * (100% - var(--t-height)));
+  height: var(--t-height);
+  width: var(--t-height);
+  background: var(--theme, --default-theme);
+  border-radius: 100%;
+  box-shadow: #000a 0 0 5px 0;
+  transition: 150ms cubic-bezier(0.18, 0.56, 0.25, 1);
+  transition-property: left, transform;
+  transform: scale(1);
 }
 
 .track.dragging .knob,
 .track:hover .knob,
 .track-wrap:focus-visible .knob {
-    transform: scale(2);
+  transform: scale(2);
 }
