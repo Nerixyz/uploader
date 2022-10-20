@@ -24,7 +24,7 @@ export class CheckboxControl extends HTMLElement {
     if (checked === this.#checked) {
       return;
     }
-    this.#checked = checked;
+    this.#checked = !!checked;
     this.#updateState();
   }
 
@@ -100,7 +100,7 @@ export class ValueChangedEvent extends Event {
   #value;
 
   get value() {
-    return this.value;
+    return this.#value;
   }
 
   constructor(value) {

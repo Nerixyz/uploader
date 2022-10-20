@@ -9,6 +9,10 @@
   animation: fade-in 500ms;
 }
 
+.buttons > * {
+  flex-grow: 1;
+}
+
 #file {
   width: 100%;
 }
