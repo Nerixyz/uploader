@@ -1,0 +1,60 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+  background: none;
+  padding: none;
+  border: none;
+}
+
+.box {
+  width: 1rem;
+  height: 1rem;
+  border: #fff5 solid 1px;
+  border-radius: 30%;
+  padding: 0.05rem;
+  background: transparent;
+  transition: 150ms;
+  transition-property: stroke, background;
+  stroke: var(--theme, currentColor);
+}
+
+.wrap:is(:hover, :focus-visible) .box {
+  background: #fff2;
+  outline: none;
+}
+
+.wrap:focus-visible {
+  outline: none;
+}
+
+.wrap:active .box {
+  background: var(--theme, currentColor);
+  stroke: var(--theme-invert, black);
+}
+
+.box > svg > path {
+  stroke-width: 3px;
+  transition: 300ms cubic-bezier(0.17, 0.65, 0.35, 1);
+  transition-property: stroke-dashoffset, stroke-dasharray, opacity, transform;
+  transform-origin: center;
+  stroke-dashoffset: 100%;
+  stroke-dasharray: 100%;
+  opacity: 0;
+  transform: scale(0.8);
+  transform-origin: center;
+}
+
+.box.checked > svg > path {
+  stroke-dashoffset: 5%;
+  stroke-dasharray: 100%;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.box > svg {
+  width: 1rem;
+  height: 1rem;
+}

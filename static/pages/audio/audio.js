@@ -6,23 +6,18 @@
   const preservePitchEl = document.getElementById('preserve-pitch');
 
   const updatePlaybackSpeed = () => {
-    audioEl.playbackRate = playbackSpeedEl.valueAsNumber;
-    playbackSpeedLbl.textContent = `${playbackSpeedEl.valueAsNumber.toFixed(1)}x`;
+    audioEl.playbackRate = playbackSpeedEl.value;
+    playbackSpeedLbl.textContent = `${(playbackSpeedEl.value ?? 1).toFixed(1)}x`;
   };
   const updatePreservePitch = () => {
-    audioEl.preservesPitch = preservePitchEl.checked;
-    audioEl.mozPreservesPitch = audioEl.preservesPitch;
+    audioEl.preservesPitch = preservePitchEl.checked ?? true;
   };
-  playbackSpeedEl.addEventListener('input', updatePlaybackSpeed);
+  playbackSpeedEl.addEventListener('value-changed', updatePlaybackSpeed);
   resetPlaybackSpeedEl.addEventListener('click', () => {
-    playbackSpeedEl.value = '1';
+    playbackSpeedEl.value = 1;
     updatePlaybackSpeed();
   });
-  preservePitchEl.addEventListener('input', updatePreservePitch);
-
-  // the browser might have set some defualt values
-  updatePlaybackSpeed();
-  updatePreservePitch();
+  preservePitchEl.addEventListener('value-changed', updatePreservePitch);
 
   audioEl.addEventListener('error', () => {
     if (audioEl.error && audioEl.error.code === 4) {

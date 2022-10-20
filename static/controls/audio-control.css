@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.time {
+  white-space: nowrap;
+}
+
+.progress {
+  flex-grow: 1;
+}
+
+.container:not(.playing) .pause,
+.container:not(.paused) .play,
+.container:not(.loading) .loader {
+  display: none;
+}
+
+button:is(.play, .pause, .repeat) {
+  background: transparent;
+  color: var(--theme);
+
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 150ms;
+  transition-property: border-color, background, color;
+  gap: 0.5rem;
+  border: none;
+  padding: 0.2rem;
+  border-radius: 100%;
+}
+
+button:is(.play, .pause, .repeat):is(:hover, :focus-visible) {
+  outline: none;
+  border-color: #fff9;
+  background: #fff1;
+}
+
+button:is(.play, .pause, .repeat):active {
+  outline: none;
+  border-color: transparent;
+  color: black;
+  background: var(--theme);
+}
+
+button:is(.play, .pause, .repeat) > svg {
+  width: 1.5rem;
+}
+
+.container:not(.loop) button.repeat:not(:active) {
+  color: #fff5;
+}
+
+.loader {
+  width: 2.5rem;
+  margin: 0.2rem;
+  height: 3px;
+  background: #45f;
+  border-radius: 2px;
+  animation: loader-loading infinite 1s cubic-bezier(0.75, 0, 0.25, 1);
+}
+
+@keyframes loader-loading {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  51% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
