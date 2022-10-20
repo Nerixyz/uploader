@@ -1,9 +1,16 @@
-(function main() {
+// make sure these scripts are loaded before executing
+import '/static/controls/audio-control.js';
+import '/static/controls/slider-control.js';
+import '/static/controls/checkbox-control.js';
+
+function main() {
   const audioEl = document.getElementById('file');
   const playbackSpeedEl = document.getElementById('playback-speed');
   const playbackSpeedLbl = document.getElementById('playback-speed-lbl');
   const resetPlaybackSpeedEl = document.getElementById('reset-playback-speed');
   const preservePitchEl = document.getElementById('preserve-pitch');
+  const copyURL = document.getElementById('copy-url');
+  const download = document.getElementById('download');
 
   const updatePlaybackSpeed = () => {
     audioEl.playbackRate = playbackSpeedEl.value;
@@ -24,4 +31,58 @@
       location.href = audioEl.src;
     }
   });
-})();
+
+  download.addEventListener('click', () => downloadUrl(audioEl.getAttribute('src')));
+
+  copyURL.addEventListener('click', () => {
+    const url = new URL(location.href);
+    url.hash = new URLSearchParams({
+      speed: playbackSpeedEl.value.toString(),
+      preserve: (preservePitchEl.checked ?? true).toString(),
+    }).toString();
+    navigator.clipboard
+      .writeText(url.toString())
+      .then(() =>
+        copyURL.animate(
+          {
+            transform: ['scale(1.05)', 'scale(1)'],
+          },
+          { duration: 150 },
+        ),
+      )
+      .catch(console.error);
+  });
+
+  const updateFromUrl = () => {
+    if (location.hash.length > 1) {
+      try {
+        const params = new URLSearchParams(location.hash.substring(1));
+        if (params.has('speed')) {
+          playbackSpeedEl.value = Number(params.get('speed'));
+          updatePlaybackSpeed();
+        }
+        if (params.has('preserve')) {
+          preservePitchEl.checked = params.get('preserve') !== 'false';
+          updatePreservePitch();
+        }
+      } catch (e) {
+        console.warn('cannot parse hash', e);
+      }
+    }
+  };
+  addEventListener('hashchange', updateFromUrl);
+  updateFromUrl();
+}
+
+function downloadUrl(url) {
+  const a = document.createElement('a');
+  a.download = url;
+  a.href = url;
+  a.click();
+}
+
+if (document.readyState === 'loading') {
+  addEventListener('DOMContentLoaded', main);
+} else {
+  main();
+}
