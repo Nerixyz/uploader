@@ -9,6 +9,10 @@
   animation: fade-in 500ms;
 }
 
+#file {
+  width: 100%;
+}
+
 .controls {
   padding: 0 2rem;
   display: grid;

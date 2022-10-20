@@ -33,6 +33,15 @@
           </button>
         </div>
         <audio-control id="file" src="{{file}}"></audio-control>
+        <noscript>
+          <audio id="file" src="{{file}}" controls autoplay></audio>
+          <style>
+            .controls,
+            .buttons {
+              display: none;
+            }
+          </style>
+        </noscript>
 
         <div class="controls">
           <label for="playback-speed">Playback Speed <span id="playback-speed-lbl">1x</span></label>

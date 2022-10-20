@@ -26,8 +26,11 @@ export class SliderControl extends HTMLElement {
    * @param {number} newValue
    */
   set value(newValue) {
-    this.#value = clamp(newValue, this.#min, this.#max);
-    this.#updateFromValue();
+    let updated = clamp(newValue, this.#min, this.#max);
+    if (this.#value !== updated) {
+      this.#value = updated;
+      this.#updateFromValue();
+    }
   }
 
   get value() {
@@ -60,6 +63,9 @@ export class SliderControl extends HTMLElement {
 
   /** @param {number} min */
   set min(min) {
+    if (min === this.#min) {
+      return;
+    }
     this.#min = min;
     this.#value = clamp(this.#value, this.#min, this.#max);
     this.#updateLabels();
@@ -71,6 +77,9 @@ export class SliderControl extends HTMLElement {
 
   /** @param {number} max */
   set max(max) {
+    if (max === this.#max) {
+      return;
+    }
     this.#max = max;
     this.#value = clamp(this.#value, this.#min, this.#max);
     this.#updateLabels();
@@ -118,11 +127,18 @@ export class SliderControl extends HTMLElement {
     shadow.appendChild(this.#trackWrap);
     this.#connectEvents();
     this.#updateLabels();
-    this.min = Number(this.getAttribute('min') ?? this.#min);
-    this.max = Number(this.getAttribute('max') ?? this.#max);
-    this.value = Number(this.getAttribute('value') ?? this.#value);
+
+    if (this.hasAttribute('min')) {
+      this.min = Number(this.getAttribute('min'));
+    }
+    if (this.hasAttribute('max')) {
+      this.max = Number(this.getAttribute('max'));
+    }
+    if (this.hasAttribute('value')) {
+      this.value = Number(this.getAttribute('value'));
+    }
+
     this.smallChange = Number(this.getAttribute('small-change') ?? this.#smallChange);
-    this.dispatchEvent(new ValueChangedEvent(this.value, false));
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

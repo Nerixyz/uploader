@@ -1,17 +1,20 @@
-import { addClass, condClass, makeEmptySvg, makePath, withClass } from '../lib/dom-tools.js';
+import { condClass, makeEmptySvg, makePath, withClass } from '../lib/dom-tools.js';
 
 const TICK_PATH = 'M 4.205 12.795 L 9 17.585 L 20.295 6.295';
 
 export class CheckboxControl extends HTMLElement {
   static get observedAttributes() {
-    return ['checked'];
+    return ['checked', 'labelledby'];
   }
 
   #checked = false;
   /** @type {HTMLDivElement} */
   #box;
-  /** @type {HTMLDivElement} */
+  /** @type {HTMLButtonElement} */
   #wrap;
+
+  /** @type {string | null} */
+  #labelledby = null;
 
   get checked() {
     return this.#checked;
@@ -23,6 +26,20 @@ export class CheckboxControl extends HTMLElement {
     }
     this.#checked = checked;
     this.#updateState();
+  }
+
+  get labelledby() {
+    return this.#labelledby;
+  }
+
+  /** @param {string | null} by */
+  set labelledby(by) {
+    this.#labelledby = by;
+    if (this.#labelledby) {
+      this.#wrap.setAttribute('aria-labelledby', this.labelledby);
+    } else {
+      this.#wrap.removeAttribute('aria-labelledby');
+    }
   }
 
   constructor() {
@@ -49,16 +66,18 @@ export class CheckboxControl extends HTMLElement {
     this.#wrap = withClass('button', 'wrap');
     this.#wrap.appendChild(this.#box);
     this.#wrap.setAttribute('tabindex', '0');
+    this.#wrap.setAttribute('role', 'checkbox');
     shadow.appendChild(this.#wrap);
 
     this.#connectEvents();
     this.#updateState();
-    this.dispatchEvent(new ValueChangedEvent(this.value));
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'checked') {
       this.checked = newValue !== null && newValue !== 'false';
+    } else if (name === 'labelledby') {
+      this.labelledby = newValue;
     }
   }
 
@@ -72,6 +91,7 @@ export class CheckboxControl extends HTMLElement {
 
   #updateState() {
     condClass(this.#box, 'checked', this.#checked);
+    this.#wrap.setAttribute('aria-checked', this.#checked.toString());
   }
 }
 

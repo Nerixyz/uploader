@@ -1,12 +1,4 @@
-import {
-  addClass,
-  clamp,
-  condClass,
-  makeButton,
-  makeSvg,
-  remClass,
-  withClass,
-} from '../lib/dom-tools.js';
+import { addClass, condClass, makeButton, makeSvg, remClass, withClass } from '../lib/dom-tools.js';
 
 const PLAY_SVG = 'M8,5.14V19.14L19,12.14L8,5.14Z';
 const PAUSE_SVG = 'M14,19H18V5H14M6,19H10V5H6V19Z';
@@ -46,7 +38,7 @@ export class AudioControl extends HTMLElement {
     this.#audio.mozPreservesPitch = pp;
   }
 
-  get preservedPitch() {
+  get preservesPitch() {
     return this.#audio.preservesPitch ?? this.#audio.mozPreservesPitch;
   }
 
@@ -71,6 +63,7 @@ export class AudioControl extends HTMLElement {
 
     this.#slider = withClass('slider-control', 'progress');
     this.#slider.formatter = fmtAriaTime;
+    this.#slider.setAttribute('value', '0');
 
     this.#timeLbl = withClass('span', 'time');
     this.#timeLbl.textContent = '0:00 /';
@@ -153,15 +146,9 @@ export class AudioControl extends HTMLElement {
   }
 
   #updateSliderMeta() {
-    if (this.#slider.min !== 0) {
-      this.#slider.min = 0;
-    }
-    if (this.#slider.max !== this.#audio.duration) {
-      this.#slider.max = this.#audio.duration;
-    }
-    if (this.#slider.value !== this.#audio.currentTime) {
-      this.#slider.value = this.#audio.currentTime;
-    }
+    this.#slider.min = 0;
+    this.#slider.max = this.#audio.duration;
+    this.#slider.value = this.#audio.currentTime;
   }
 
   #updateLabel() {
