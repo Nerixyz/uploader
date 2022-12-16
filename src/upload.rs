@@ -1,5 +1,6 @@
 use std::{
     fmt, io,
+    path::Path,
     pin::Pin,
     task::{Context, Poll},
 };
@@ -8,7 +9,7 @@ use actix_web::{
     error::PayloadError,
     http::header::ContentType,
     web::{Header, Payload},
-    HttpResponse,
+    HttpRequest, HttpResponse,
 };
 use bytes::{Bytes, BytesMut};
 use futures::{Stream, StreamExt};
@@ -17,6 +18,9 @@ use tokio::io::AsyncWriteExt;
 use tracing::warn;
 
 use crate::{config::CONFIG, deletion, rng};
+
+// <=> Used when uploading from the homepage.
+const FILENAME_POST_HEADER: &str = "X-Upload-Filename";
 
 #[derive(Debug, thiserror::Error, actix_web_error::Json)]
 pub enum MultipartError {
@@ -68,8 +72,9 @@ pub async fn upload_multipart(
     let mut mp = multer::Multipart::new(UnsafePayload(body), boundary);
     match mp.next_field().await.map_err(MultipartError::Multer)? {
         Some(mut field) => {
+            let filename = field.file_name().map(|f| f.to_owned());
             let ct = field.content_type().cloned();
-            inner_upload(&mut field, ct.as_ref())
+            inner_upload(&mut field, ct.as_ref(), filename.as_ref().map(Path::new))
                 .await
                 .map_err(MultipartError::Upload)
         }
@@ -80,9 +85,15 @@ pub async fn upload_multipart(
 pub async fn upload_post(
     mut body: Payload,
     h: Option<Header<ContentType>>,
+    req: HttpRequest,
 ) -> Result<HttpResponse, PostError> {
     let mime = h.map(|h| h.0 .0);
-    inner_upload(&mut body, mime.as_ref())
+    let filename = req
+        .headers()
+        .get(FILENAME_POST_HEADER)
+        .and_then(|h| h.to_str().ok())
+        .map(Path::new);
+    inner_upload(&mut body, mime.as_ref(), filename)
         .await
         .map_err(PostError::Upload)
 }
@@ -90,6 +101,7 @@ pub async fn upload_post(
 async fn inner_upload<S, E>(
     stream: &mut S,
     content_type: Option<&mime::Mime>,
+    upload_filename: Option<&Path>,
 ) -> Result<HttpResponse, UploadError<E>>
 where
     S: Stream<Item = Result<Bytes, E>> + Unpin,
@@ -98,7 +110,19 @@ where
     let mut filename = rng::generate_name();
     filename.push('.');
     let (extension, ty, initial_buf) = determine_extension(stream, content_type).await?;
-    filename.push_str(extension);
+    // Check if the user provided a filename, and try to use its extension.
+    // However, we still check the expected extension, because we want to determine the filetype,
+    // so we can return an enhanced page.
+    if let Some(f) = upload_filename
+        .and_then(|p| p.extension())
+        .and_then(|s| s.to_str())
+    {
+        // overwritten extension
+        filename.push_str(f);
+    } else {
+        // determined extension
+        filename.push_str(extension);
+    }
 
     let file_path = CONFIG.file_dir.join(&filename);
     let res = async move /* try */ {
