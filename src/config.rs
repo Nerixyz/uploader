@@ -47,7 +47,7 @@ where
             E: Error,
         {
             let mut arr = GenericArray::<u8, <Hmac<Sha224> as KeySizeUser>::KeySize>::default();
-            base64::decode_config_slice(v, base64::STANDARD, &mut arr[..])
+            base64::decode_engine_slice(v, &mut arr[..], &base64::engine::DEFAULT_ENGINE)
                 .map_err(|e| E::custom(e))?;
             Ok(arr)
         }
