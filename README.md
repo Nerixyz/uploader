@@ -17,6 +17,8 @@ but everyone can open the link.
 bind = "127.0.0.1:4833"
 file_dir = "uploads"
 domain = "https://i.nerixyz.de"
+# You can use anything here really.
+# Make sure the header is sufficiently long.
 authorization = "Bearer <token>"
 # Base64, Used for deletion links
 # Must be 28bytes (224bit) long
@@ -31,7 +33,56 @@ secret = "..."
 You can upload either by sending a `multipart/form-data` request to `/upload` (the first field will be used) or by sending a `POST` request to `/upload`.
 In both cases a valid `Authorization` header must be used.
 
-### Response
+## Uploader Configuration
+
+### ShareX
+
+Use the following ShareX config and replace `{config.domain}` and `{config.authorization}` with the respective values from your [`config.toml`](#building-and-running):
+
+```json
+{
+  "Version": "14.1.0",
+  "Name": "Uploader",
+  "DestinationType": "ImageUploader, TextUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "{config.domain}/upload",
+  "Headers": {
+    "Authorization": "{config.authorization}"
+  },
+  "Body": "MultipartFormData",
+  "FileFormName": "file",
+  "URL": "{json:link}",
+  "DeletionURL": "{json:deletion_link}"
+}
+```
+
+### Chatterino
+
+Use the following configuration and replace `{config.domain}` and `{config.authorization}` with the respective values from your [`config.toml`](#building-and-running):
+
+```json
+{
+  "external": {
+    "imageUploader": {
+      "enabled": true,
+      "url": "{config.domain}/upload",
+      "formField": "file",
+      "headers": "Authorization: {config.authorization}",
+      "link": "{link}",
+      "deletionLink": "{deletion_link}"
+    }
+  }
+}
+```
+
+<details>
+<summary>Screenshot</summary>
+
+![](https://user-images.githubusercontent.com/19953266/208187827-37564bf8-7dd3-48a2-9f7a-c007413249c0.png)
+
+</details>
+
+## Upload Response
 
 ```typescript
 type UploadResponse =
