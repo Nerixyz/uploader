@@ -2,6 +2,10 @@ use std::io;
 
 use actix_files::NamedFile;
 use actix_web::{delete, get, web, HttpResponse, Responder};
+use base64::engine::{
+    fast_portable::{FastPortable, FastPortableConfig},
+    DecodePaddingMode,
+};
 use hmac::{Hmac, Mac};
 use sha2::Sha224;
 
@@ -9,12 +13,19 @@ use crate::config::CONFIG;
 
 type HmacSha224 = Hmac<Sha224>;
 
+const DELETION_KEY_ENGINE: FastPortable = FastPortable::from(
+    &base64::alphabet::URL_SAFE,
+    FastPortableConfig::new()
+        .with_encode_padding(false)
+        .with_decode_padding_mode(DecodePaddingMode::Indifferent),
+);
+
 pub fn make_key(link: &str) -> String {
     let mut mac = HmacSha224::new(&CONFIG.secret);
     mac.update(link.as_bytes());
     let bytes = mac.finalize().into_bytes();
     let mut buf = String::with_capacity(38);
-    base64::encode_config_buf(&bytes, base64::URL_SAFE_NO_PAD, &mut buf);
+    base64::encode_engine_string(&bytes, &mut buf, &DELETION_KEY_ENGINE);
     buf
 }
 
@@ -55,7 +66,7 @@ fn check_key(link: &str, key: &str) -> bool {
     }
 
     let mut dec = [0; 32];
-    let dec_len = match base64::decode_config_slice(key, base64::URL_SAFE_NO_PAD, &mut dec) {
+    let dec_len = match base64::decode_engine_slice(key, &mut dec, &DELETION_KEY_ENGINE) {
         Ok(l) => l,
         Err(_) => return false,
     };
