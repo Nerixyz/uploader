@@ -73,6 +73,7 @@ function makeUploadStuff() {
   });
 
   // FILE UPLOAD
+  /** @type {File | null} */
   let currentFile = null;
   let dragRc = 0;
   let dndDialog = null;
@@ -86,6 +87,7 @@ function makeUploadStuff() {
 
   uploadForm.addEventListener('submit', e => {
     e.preventDefault();
+    /** @type {File | Blob | null} */
     let toUpload = null;
     if (fileMode) {
       toUpload = currentFile;
@@ -322,6 +324,10 @@ function createUploading() {
   ];
 }
 
+/**
+ * @param {File | Blob} file
+ * @return {Promise<void>}
+ */
 async function uploadFile(file) {
   const [content, progressCb] = createUploading();
   const overlay = createOverlay({ title: 'Uploading...', content });
@@ -333,6 +339,12 @@ async function uploadFile(file) {
   }
 }
 
+/**
+ *
+ * @param {File | Blob} file
+ * @param progressCb
+ * @return {Promise<{link: string, deletionLink: string}>}
+ */
 function upload(file, progressCb) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -362,6 +374,9 @@ function upload(file, progressCb) {
     });
     xhr.open('POST', '/upload');
     xhr.setRequestHeader('Authorization', localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (file instanceof File) {
+      xhr.setRequestHeader('X-Upload-Filename', file.name);
+    }
     xhr.send(file);
   });
 }
