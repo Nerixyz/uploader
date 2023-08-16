@@ -32,7 +32,7 @@
   align-items: center;
 }
 
-#playback-speed {
+.range-group > slider-control {
   flex-grow: 1;
 }
 
