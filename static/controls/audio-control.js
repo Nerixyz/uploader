@@ -141,6 +141,24 @@ export class AudioControl extends HTMLElement {
       condClass(this.#container, 'loop', this.#audio.loop);
     });
     condClass(this.#container, 'loop', this.#audio.loop);
+
+    // TODO: this listener isn't unregistered
+    document.addEventListener(
+      'keypress',
+      e => {
+        if (e.code !== 'Space') {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        if (this.#audio.paused) {
+          this.#audio.play().catch(console.warn);
+        } else {
+          this.#audio.pause();
+        }
+      },
+      { capture: true },
+    );
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
