@@ -2,9 +2,12 @@ use std::io;
 
 use actix_files::NamedFile;
 use actix_web::{delete, get, web, HttpResponse, Responder};
-use base64::engine::{
-    fast_portable::{FastPortable, FastPortableConfig},
-    DecodePaddingMode,
+use base64::{
+    engine::{
+        general_purpose::{GeneralPurpose, GeneralPurposeConfig},
+        DecodePaddingMode,
+    },
+    Engine,
 };
 use hmac::{Hmac, Mac};
 use sha2::Sha224;
@@ -13,9 +16,9 @@ use crate::config::CONFIG;
 
 type HmacSha224 = Hmac<Sha224>;
 
-const DELETION_KEY_ENGINE: FastPortable = FastPortable::from(
+const DELETION_KEY_ENGINE: GeneralPurpose = GeneralPurpose::new(
     &base64::alphabet::URL_SAFE,
-    FastPortableConfig::new()
+    GeneralPurposeConfig::new()
         .with_encode_padding(false)
         .with_decode_padding_mode(DecodePaddingMode::Indifferent),
 );
@@ -25,7 +28,7 @@ pub fn make_key(link: &str) -> String {
     mac.update(link.as_bytes());
     let bytes = mac.finalize().into_bytes();
     let mut buf = String::with_capacity(38);
-    base64::encode_engine_string(&bytes, &mut buf, &DELETION_KEY_ENGINE);
+    DELETION_KEY_ENGINE.encode_string(&bytes, &mut buf);
     buf
 }
 
@@ -66,7 +69,7 @@ fn check_key(link: &str, key: &str) -> bool {
     }
 
     let mut dec = [0; 32];
-    let dec_len = match base64::decode_engine_slice(key, &mut dec, &DELETION_KEY_ENGINE) {
+    let dec_len = match DELETION_KEY_ENGINE.decode_slice(key, &mut dec) {
         Ok(l) => l,
         Err(_) => return false,
     };

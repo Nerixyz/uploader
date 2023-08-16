@@ -17,9 +17,9 @@ jobs:
     - name: Rust Cache
       uses: Swatinem/rust-cache@v2
     - name: Build
-      run: cargo build --verbose
+      run: cargo build
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test
   check-format-rs:
     runs-on: ubuntu-latest
     steps:

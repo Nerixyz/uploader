@@ -4,6 +4,6 @@
     "check-format": "prettier -c \"{static,templates}/**/*.{js,css,html,ts,json,md}\" \"README.md\""
   },
   "devDependencies": {
-    "prettier": "^2.8.1"
+    "prettier": "^3.0.2"
   }
 }
