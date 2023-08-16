@@ -28,7 +28,7 @@ pub fn make_key(link: &str) -> String {
     mac.update(link.as_bytes());
     let bytes = mac.finalize().into_bytes();
     let mut buf = String::with_capacity(38);
-    DELETION_KEY_ENGINE.encode_string(&bytes, &mut buf);
+    DELETION_KEY_ENGINE.encode_string(bytes, &mut buf);
     buf
 }
 
