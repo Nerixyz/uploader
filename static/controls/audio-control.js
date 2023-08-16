@@ -33,6 +33,10 @@ export class AudioControl extends HTMLElement {
     this.#audio.playbackRate = rate;
   }
 
+  set volume(lvl) {
+    this.#audio.volume = lvl;
+  }
+
   set preservesPitch(pp) {
     this.#audio.preservesPitch = pp;
     this.#audio.mozPreservesPitch = pp;
