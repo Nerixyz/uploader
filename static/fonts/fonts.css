@@ -3,7 +3,8 @@
   font-family: 'JetBrains Mono';
   font-style: normal;
   font-weight: 400;
-  src: url('/static/fonts/jetbrains-mono-v13-latin-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/jetbrains-mono-v13-latin-regular.woff2') format('woff2'),
     url('/static/fonts/jetbrains-mono-v13-latin-regular.woff') format('woff');
 }
 /* open-sans-regular - latin */
@@ -11,7 +12,8 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: url('/static/fonts/open-sans-v34-latin-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/open-sans-v34-latin-regular.woff2') format('woff2'),
     url('/static/fonts/open-sans-v34-latin-regular.woff') format('woff');
 }
 
@@ -20,6 +22,7 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: url('/static/fonts/open-sans-v34-latin-700.woff2') format('woff2'),
+  src:
+    url('/static/fonts/open-sans-v34-latin-700.woff2') format('woff2'),
     url('/static/fonts/open-sans-v34-latin-700.woff') format('woff');
 }
