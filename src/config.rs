@@ -1,5 +1,6 @@
 use std::{fmt::Formatter, path::PathBuf};
 
+use base64::Engine;
 use hmac::{
     digest::{crypto_common::KeySizeUser, generic_array::GenericArray, Key},
     Hmac,
@@ -24,8 +25,9 @@ pub struct Config {
 }
 
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
-    toml::from_slice(
-        &std::fs::read("config.toml").expect("A config.toml must be in the working directory"),
+    toml::from_str(
+        &std::fs::read_to_string("config.toml")
+            .expect("A config.toml must be in the working directory"),
     )
     .expect("The config.toml must be valid")
 });
@@ -47,7 +49,8 @@ where
             E: Error,
         {
             let mut arr = GenericArray::<u8, <Hmac<Sha224> as KeySizeUser>::KeySize>::default();
-            base64::decode_engine_slice(v, &mut arr[..], &base64::engine::DEFAULT_ENGINE)
+            base64::engine::general_purpose::STANDARD
+                .decode_slice(v, &mut arr[..])
                 .map_err(|e| E::custom(e))?;
             Ok(arr)
         }
