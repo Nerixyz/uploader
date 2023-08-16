@@ -192,7 +192,7 @@ where
                     }
                     Some(ref mut buf) => {
                         buf.extend_from_slice(&item);
-                        match infer::get(&buf) {
+                        match infer::get(buf) {
                             Some(ty) => break Some((ty.extension(), type_hint_from_infer(&ty))),
                             None if buf.len() > 256 => {
                                 break None;

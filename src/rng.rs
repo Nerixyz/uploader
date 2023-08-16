@@ -16,6 +16,6 @@ impl Distribution<u8> for Filename {
 
         // (0..2^6)
         let var = rng.next_u32() >> (32 - 6);
-        return GEN_ASCII_STR_CHARSET[var as usize];
+        GEN_ASCII_STR_CHARSET[var as usize]
     }
 }
