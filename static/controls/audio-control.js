@@ -74,6 +74,8 @@ export class AudioControl extends HTMLElement {
 
     this.#playBtn = makeButton(makeSvg(PLAY_SVG), 'Play', 'play');
     this.#pauseBtn = makeButton(makeSvg(PAUSE_SVG), 'Pause', 'pause');
+    this.#playBtn.tabIndex = 0;
+    this.#pauseBtn.tabIndex = 0;
     const loading = withClass('div', 'loader');
 
     this.#repeatBtn = makeButton(makeSvg(REPEAT_SVG), 'Repeat', 'repeat');
@@ -143,22 +145,18 @@ export class AudioControl extends HTMLElement {
     condClass(this.#container, 'loop', this.#audio.loop);
 
     // TODO: this listener isn't unregistered
-    document.addEventListener(
-      'keypress',
-      e => {
-        if (e.code !== 'Space') {
-          return;
-        }
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.#audio.paused) {
-          this.#audio.play().catch(console.warn);
-        } else {
-          this.#audio.pause();
-        }
-      },
-      { capture: true },
-    );
+    document.addEventListener('keypress', e => {
+      if (e.code !== 'Space' || e.target != document.body) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.#audio.paused) {
+        this.#audio.play().catch(console.warn);
+      } else {
+        this.#audio.pause();
+      }
+    });
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
