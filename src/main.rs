@@ -4,6 +4,7 @@ use actix_web::{
     dev::{fn_service, ServiceRequest, ServiceResponse},
     get, http,
     http::{header, StatusCode},
+    middleware::Compress,
     web, App, HttpServer, Responder,
 };
 use tracing::level_filters::LevelFilter;
@@ -76,6 +77,7 @@ async fn main() -> std::io::Result<()> {
                     .max_age(60 * 60),
             )
             .wrap(TracingLogger::default())
+            .wrap(Compress::default())
             .service(
                 web::resource("/upload")
                     .app_data(web::PayloadConfig::new(1024 * 1024 * 100)) // 100MB
