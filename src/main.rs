@@ -7,6 +7,8 @@ use actix_web::{
     middleware::Compress,
     web, App, HttpServer, Responder,
 };
+use args::Args;
+use clap::Parser;
 use tracing::level_filters::LevelFilter;
 use tracing_actix_web::TracingLogger;
 use tracing_subscriber::EnvFilter;
@@ -19,7 +21,9 @@ use crate::{
     upload::{upload_multipart, upload_post},
 };
 
+mod args;
 mod auth;
+mod clean;
 mod config;
 mod deletion;
 mod guards;
@@ -66,6 +70,11 @@ async fn main() -> std::io::Result<()> {
         .init();
 
     std::fs::create_dir_all(&CONFIG.file_dir).unwrap();
+
+    let args = Args::parse();
+    if let Some(cmd) = args.cmd {
+        return cmd.run();
+    };
 
     HttpServer::new(move || {
         App::new()
