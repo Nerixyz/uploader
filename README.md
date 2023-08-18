@@ -28,6 +28,23 @@ secret = "..."
 
 - Build/Run the project `cargo b -r` or `cargo r -r`
 
+### Cleaning
+
+To clean files, use the `clean` subcommand - `cargo r -r -- clean`:
+
+```text
+$ cargo r -r -- clean --help
+Clean the oldest files
+
+Usage: uploader clean [OPTIONS]
+
+Options:
+  -a, --max-age <MAX_AGE>  Files older than this age will be removed [default: 1y]
+      --dry-run            Don't remove files, print them to stdout
+  -m, --metric <METRIC>    Which metric of a file to use to determine its age [default: modified] [possible values: accessed, modified, created]
+  -h, --help               Print help
+```
+
 ## Usage
 
 You can upload either by sending a `multipart/form-data` request to `/upload` (the first field will be used) or by sending a `POST` request to `/upload`.
