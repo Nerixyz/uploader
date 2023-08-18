@@ -1,5 +1,6 @@
 use crate::clean;
 
+/// If no subcommand is specified, the server will run.
 #[derive(clap::Parser)]
 #[command(author, version, about)]
 pub struct Args {
@@ -9,11 +10,15 @@ pub struct Args {
 
 #[derive(clap::Subcommand)]
 pub enum Command {
+    /// Clean the oldest files.
     Clean {
+        /// Files older than this age will be removed.
         #[arg(short = 'a', long, default_value = "1y")]
         max_age: humantime::Duration,
+        /// Don't remove files, print them to stdout.
         #[arg(long, default_value_t = false)]
         dry_run: bool,
+        /// Which metric of a file to use to determine its age.
         #[arg(short = 'm', long, default_value = "modified")]
         metric: FileMetric,
     },
