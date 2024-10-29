@@ -1,6 +1,7 @@
 use std::future::{ready, Ready};
 
 use actix_web::dev::{Service, ServiceRequest, ServiceResponse, Transform};
+use constant_time_eq::constant_time_eq;
 use futures::future::Either;
 
 pub struct AuthRequirement {
@@ -66,7 +67,7 @@ where
             Some(h) => h,
             None => return Either::Left(ready(Err(AuthError::NoHeader.into()))),
         };
-        if header.as_bytes() == self.key.as_bytes() {
+        if constant_time_eq(header.as_bytes(), self.key.as_bytes()) {
             Either::Right(self.service.call(req))
         } else {
             Either::Left(ready(Err(AuthError::BadAuth.into())))
