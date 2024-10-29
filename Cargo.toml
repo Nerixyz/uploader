@@ -15,6 +15,7 @@ askama = "0.12.1"
 base64 = "0.22.1"
 bytes = "1.8.0"
 clap = { version = "4.5.20", features = ["derive"] }
+constant_time_eq = "0.3.1"
 futures = "0.3"
 hmac = "0.12.1"
 humantime = "2.1.0"
