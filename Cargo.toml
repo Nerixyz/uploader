@@ -14,7 +14,7 @@ actix-web-lab = "0.23.0"
 askama = "0.12.1"
 base64 = "0.22.1"
 bytes = "1.8.0"
-clap = { version = "4.5.20", features = ["derive"] }
+clap = { version = "4.5.21", features = ["derive"] }
 constant_time_eq = "0.3.1"
 futures = "0.3"
 hmac = "0.12.1"
@@ -25,12 +25,12 @@ mime_guess = "2.0.5"
 multer = "3.1.0"
 once_cell = "1.20.2"
 rand = "0.8.5"
-serde = { version = "1.0.213", features = ["derive"] }
-serde_json = "1.0.132"
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = "1.0.133"
 sha2 = "0.10.8"
 thiserror = "2.0.3"
 tokio = { version = "1.41", features = ["fs"] }
 toml = "0.8.19"
 tracing = "0.1.40"
-tracing-actix-web = "0.7.14"
+tracing-actix-web = "0.7.15"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
