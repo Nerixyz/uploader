@@ -13,7 +13,7 @@ actix-web-error = "0.2.0"
 actix-web-lab = "0.23.0"
 askama = "0.12.1"
 base64 = "0.22.1"
-bytes = "1.8.0"
+bytes = "1.9.0"
 clap = { version = "4.5.21", features = ["derive"] }
 constant_time_eq = "0.3.1"
 futures = "0.3"
@@ -31,6 +31,6 @@ sha2 = "0.10.8"
 thiserror = "2.0.3"
 tokio = { version = "1.41", features = ["fs"] }
 toml = "0.8.19"
-tracing = "0.1.40"
+tracing = "0.1.41"
 tracing-actix-web = "0.7.15"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
