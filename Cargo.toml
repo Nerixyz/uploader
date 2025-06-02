@@ -14,7 +14,7 @@ actix-web-lab = "0.24.1"
 askama = "0.14.0"
 base64 = "0.22.1"
 bytes = "1.10.1"
-clap = { version = "4.5.38", features = ["derive"] }
+clap = { version = "4.5.39", features = ["derive"] }
 constant_time_eq = "0.4.2"
 futures = "0.3"
 hmac = "0.12.1"
