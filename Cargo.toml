@@ -7,14 +7,14 @@ edition = "2021"
 
 [dependencies]
 actix-cors = "0.7.1"
-actix-files = "0.6.8"
-actix-web = "4.11.0"
+actix-files = "0.6.9"
+actix-web = "4.12.1"
 actix-web-error = "0.2.0"
 actix-web-lab = "0.24.3"
 askama = "0.14.0"
 base64 = "0.22.1"
-bytes = "1.10.1"
-clap = { version = "4.5.50", features = ["derive"] }
+bytes = "1.11.0"
+clap = { version = "4.5.53", features = ["derive"] }
 constant_time_eq = "0.4.2"
 futures = "0.3"
 hmac = "0.12.1"
@@ -31,6 +31,6 @@ sha2 = "0.10.9"
 thiserror = "2.0.17"
 tokio = { version = "1.48", features = ["fs"] }
 toml = "0.9.8"
-tracing = "0.1.41"
+tracing = "0.1.43"
 tracing-actix-web = "0.7.19"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
