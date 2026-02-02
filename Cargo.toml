@@ -11,10 +11,10 @@ actix-files = "0.6.9"
 actix-web = "4.12.1"
 actix-web-error = "0.2.0"
 actix-web-lab = "0.24.3"
-askama = "0.15.1"
+askama = "0.15.4"
 base64 = "0.22.1"
 bytes = "1.11.0"
-clap = { version = "4.5.54", features = ["derive"] }
+clap = { version = "4.5.56", features = ["derive"] }
 constant_time_eq = "0.4.2"
 futures = "0.3"
 hmac = "0.12.1"
