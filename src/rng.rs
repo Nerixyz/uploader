@@ -1,4 +1,4 @@
-use rand::{rng, Rng};
+use rand::{rng, Rng, RngExt};
 
 pub fn generate_name() -> String {
     let rng = rng();
