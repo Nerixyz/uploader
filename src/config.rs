@@ -2,7 +2,7 @@ use std::{fmt::Formatter, path::PathBuf};
 
 use base64::Engine;
 use hmac::{
-    digest::{crypto_common::KeySizeUser, generic_array::GenericArray, Key},
+    digest::{array::Array, common::KeySizeUser, Key},
     Hmac,
 };
 use once_cell::sync::Lazy;
@@ -48,7 +48,7 @@ where
         where
             E: Error,
         {
-            let mut arr = GenericArray::<u8, <Hmac<Sha224> as KeySizeUser>::KeySize>::default();
+            let mut arr = Array::<u8, <Hmac<Sha224> as KeySizeUser>::KeySize>::default();
             base64::engine::general_purpose::STANDARD
                 .decode_slice(v, &mut arr[..])
                 .map_err(|e| E::custom(e))?;

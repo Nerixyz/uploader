@@ -9,7 +9,7 @@ use base64::{
     },
     Engine,
 };
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::Sha224;
 
 use crate::config::CONFIG;
