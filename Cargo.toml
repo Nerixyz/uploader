@@ -12,7 +12,7 @@ actix-web = "4.13.0"
 actix-web-error = "0.2.0"
 actix-web-lab = "0.26.0"
 askama = "0.16.0"
-base64 = "0.22.1"
+base64 = "0.23.0"
 bytes = "1.11.1"
 clap = { version = "4.6.0", features = ["derive"] }
 constant_time_eq = "0.5.0"
