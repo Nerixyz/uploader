@@ -33,7 +33,7 @@ mod upload;
 
 async fn not_found_svc(req: ServiceRequest) -> Result<ServiceResponse, actix_web::Error> {
     let (req, _) = req.into_parts();
-    let file = NamedFile::open_async("./static/404.html").await?;
+    let file = NamedFile::open("./static/404.html")?;
     let mut res = file.into_response(&req);
     *res.status_mut() = StatusCode::NOT_FOUND;
     Ok(ServiceResponse::new(req, res))
@@ -41,9 +41,7 @@ async fn not_found_svc(req: ServiceRequest) -> Result<ServiceResponse, actix_web
 
 async fn not_found_svc_short(req: ServiceRequest) -> Result<ServiceResponse, actix_web::Error> {
     let (req, _) = req.into_parts();
-    let file = NamedFile::open_async("./static/404.html")
-        .await?
-        .use_etag(false);
+    let file = NamedFile::open("./static/404.html")?.use_etag(false);
     let mut res = file.into_response(&req);
     *res.status_mut() = StatusCode::NOT_FOUND;
     Ok(ServiceResponse::new(req, res))
@@ -51,12 +49,12 @@ async fn not_found_svc_short(req: ServiceRequest) -> Result<ServiceResponse, act
 
 #[get("/")]
 async fn index() -> impl Responder {
-    NamedFile::open_async("./static/pages/home/home.html").await
+    NamedFile::open("./static/pages/home/home.html")
 }
 
 #[get("/favicon.ico")]
 async fn favicon() -> impl Responder {
-    NamedFile::open_async("./static/favicon.ico").await
+    NamedFile::open("./static/favicon.ico")
 }
 
 #[actix_web::main]
