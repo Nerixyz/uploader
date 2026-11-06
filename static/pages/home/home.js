@@ -387,7 +387,7 @@ function tryJsonErrorXhr(xhr) {
     : xhr.responseText;
   return new Error(
     `${xhr.status} ${xhr.statusText} - ${
-      typeof json === 'string' ? json : json?.message ?? json?.error ?? JSON.stringify(json)
+      typeof json === 'string' ? json : (json?.message ?? json?.error ?? JSON.stringify(json))
     }`,
   );
 }

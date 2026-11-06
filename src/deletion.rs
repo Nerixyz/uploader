@@ -60,7 +60,7 @@ pub async fn service(path: web::Path<(String, String)>) -> Result<HttpResponse, 
 
 #[get("/d/{filename}/{key}")]
 pub async fn view() -> impl Responder {
-    NamedFile::open_async("./static/pages/delete/delete.html").await
+    NamedFile::open("./static/pages/delete/delete.html")
 }
 
 fn check_key(link: &str, key: &str) -> bool {
