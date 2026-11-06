@@ -186,9 +186,9 @@ if (!customElements.get('audio-control')) {
  * @param {number} time seconds
  */
 function fmtTime(time) {
-  const seconds = time % 60 | 0;
+  const seconds = (time % 60) | 0;
   time /= 60;
-  const minutes = time % 60 | 0;
+  const minutes = (time % 60) | 0;
   time /= 60;
   const hours = time | 0;
 
@@ -205,9 +205,9 @@ function fmtTime(time) {
  * @param {number} time seconds
  */
 function fmtAriaTime(time) {
-  const seconds = time % 60 | 0;
+  const seconds = (time % 60) | 0;
   time /= 60;
-  const minutes = time % 60 | 0;
+  const minutes = (time % 60) | 0;
   time /= 60;
   const hours = time | 0;
 
